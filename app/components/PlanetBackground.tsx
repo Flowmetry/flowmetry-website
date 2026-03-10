@@ -124,7 +124,7 @@ export function PlanetBackground() {
   useEffect(() => {
     setDims({
       height: window.innerHeight,                    // snapshot — never recalculated
-      cameraZ: window.innerWidth < 768 ? 8 : 5,     // mobile camera distance
+      cameraZ: window.innerWidth < 768 ? 7 : 5,     // mobile camera distance
     });
   }, []);  // empty deps → runs exactly once
 
