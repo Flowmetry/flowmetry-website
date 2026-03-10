@@ -56,37 +56,32 @@ function buildBumpMap(size: number): THREE.CanvasTexture {
 
 /* ── Planet ──────────────────────────────────────────────────────────────── */
 /*
- * Scale is computed ONCE from the Three.js viewport (world-space dimensions at
- * the camera near plane). This guarantees the sphere never clips left/right and
- * never changes size when the mobile browser chrome appears/disappears on scroll.
+ * Scale is fixed at 1.0 — camera distance (cameraZ) controls apparent size.
+ * On mobile (< 768 px wide) the camera is pulled back to z = 8, making the
+ * sphere appear at ~87 % of the viewport width without side-clipping.
  *
- * Math:
- *   viewport.width  = 2 * z * tan(FOV/2) * aspect  (world units)
- *   viewport.height = 2 * z * tan(FOV/2)
+ * Math (sphere_diameter = 2 × r × scale = 3.0 world units, scale = 1.0):
+ *   viewport.width  = 2 × z × tan(FOV/2) × aspect
  *
- *   sphere_diameter = 2 * geometry_radius * scale
+ *   Desktop  z = 5, aspect ≈ 1.6 → viewport.width ≈ 7.5  → sphere = 40 % of width  ✓
+ *   Mobile   z = 8, aspect ≈ 0.46 → viewport.width ≈ 3.45 → sphere = 87 % of width  ✓
  *
- *   To fill 88% of the NARROWER viewport dimension with no clipping:
- *     2 * 1.5 * scale = min(w, h) * 0.88
- *     scale           = min(w, h) * 0.293
- *
- *   Capped at 1.0 so desktop (where height is narrower) keeps the current size.
+ * yOffset = 8 % of viewport.height keeps the sphere in the hero band and
+ * guarantees sphere top (offset + 1.5) < viewport top edge (height / 2).
  */
 
 function Planet() {
   const { viewport } = useThree();
   const meshRef = useRef<THREE.Mesh>(null);
 
-  // Both scale and yOffset are captured once — never recalculated on resize/scroll.
+  // Both values are captured once — never recalculated on resize/scroll.
 
-  // Scale: sphere fills 88% of the narrower viewport dimension, capped at 1.0 on desktop.
-  const scale = useRef(
-    Math.min(Math.min(viewport.width, viewport.height) * 0.293, 1.0)
-  ).current;
+  // Scale fixed at 1.0; camera Z (set in PlanetBackground) controls apparent size.
+  const scale = 1.0;
 
-  // Y offset: push planet upward so it sits behind the hero headline, not screen-center.
-  // 18% of viewport height ≈ behind the headline/KPI band on all breakpoints.
-  const yOffset = useRef(viewport.height * 0.18).current;
+  // Y offset: push planet upward into the hero area without clipping at the top.
+  // 8 % of viewport height → sphere top stays ~20 % below the viewport edge.
+  const yOffset = useRef(viewport.height * 0.08).current;
 
   const colorMap = useLoader(THREE.TextureLoader, PLANET_TEX);
 
@@ -124,6 +119,10 @@ export function PlanetBackground() {
   useEffect(() => setMounted(true), []);
   if (!mounted) return null;
 
+  // Computed once after mount — stable, never recalculates on scroll or resize.
+  // Mobile (< 768 px): camera pulled back so the full sphere fits the narrow viewport.
+  const cameraZ = window.innerWidth < 768 ? 8 : 5;
+
   return (
     /* position:fixed + inset:0 — canvas never scrolls or reflows */
     <div
@@ -145,8 +144,8 @@ export function PlanetBackground() {
           gl.toneMappingExposure = 0.8;
         }}
       >
-        {/* Single camera for all breakpoints — scale handles sizing */}
-        <PerspectiveCamera makeDefault position={[0, 0, 5]} fov={50} />
+        {/* z = 5 desktop, z = 8 mobile — distance controls apparent sphere size */}
+        <PerspectiveCamera makeDefault position={[0, 0, cameraZ]} fov={50} />
 
         {/* Stars */}
         <Stars radius={100} depth={50} count={5000} factor={4} saturation={0} fade />
