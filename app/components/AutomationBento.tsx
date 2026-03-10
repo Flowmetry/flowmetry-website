@@ -1,7 +1,7 @@
 'use client';
 
-import { motion, AnimatePresence } from 'framer-motion';
-import { useEffect, useState } from 'react';
+import { motion, AnimatePresence, useInView } from 'framer-motion';
+import { useEffect, useRef, useState } from 'react';
 import type { ReactNode } from 'react';
 
 // ─── Shared config ────────────────────────────────────────────────────────────
@@ -313,9 +313,17 @@ function OutreachVisual() {
 const CHART_D = 'M10,108 C35,98 55,86 85,74 C115,62 138,52 165,42 C192,32 218,24 250,15';
 
 function AnalyticsVisual() {
+  // Observe a div — IntersectionObserver is unreliable on SVG primitives on mobile.
+  // Once the div is in view, drive all SVG animations via the `animate` prop.
+  const ref    = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { once: true, amount: 0.1 });
+
   return (
-    // overflow:visible + extra padding give the CSS drop-shadow room to breathe
-    <div className="flex-1 flex items-center justify-center py-6 px-4" style={{ overflow: 'visible' }}>
+    <div
+      ref={ref}
+      className="flex-1 flex items-center justify-center py-6 px-4"
+      style={{ overflow: 'visible' }}
+    >
       <svg
         viewBox="0 0 265 125"
         fill="none"
@@ -325,8 +333,6 @@ function AnalyticsVisual() {
         aria-hidden="true"
       >
         <defs>
-          {/* ab-cf SVG filter removed — it caused a visible rectangular bounding box
-              on mobile. Glow is now handled via CSS drop-shadow on the main line. */}
           <linearGradient id="ab-cg" x1="0%" y1="0%" x2="0%" y2="100%">
             <stop offset="0%" stopColor="#22C55E" stopOpacity="0.22"/>
             <stop offset="100%" stopColor="#22C55E" stopOpacity="0"/>
@@ -348,12 +354,11 @@ function AnalyticsVisual() {
           fill="url(#ab-cg)"
           clipPath="url(#ab-cc)"
           initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={vp}
+          animate={inView ? { opacity: 1 } : undefined}
           transition={{ duration: 0.6, delay: 1.6 }}
         />
 
-        {/* Glow ambient layer — thick soft stroke, no SVG filter (avoids bbox box artifact) */}
+        {/* Glow ambient layer — thick soft stroke, no SVG filter (avoids bbox artifact) */}
         <motion.path
           d={CHART_D}
           stroke="#22C55E"
@@ -362,12 +367,11 @@ function AnalyticsVisual() {
           fill="none"
           opacity={0.13}
           initial={{ pathLength: 0 }}
-          whileInView={{ pathLength: 1 }}
-          viewport={vp}
+          animate={inView ? { pathLength: 1 } : undefined}
           transition={{ duration: 1.8, ease: 'easeOut' }}
         />
 
-        {/* Main line — CSS drop-shadow for glow; GPU-composited via will-change */}
+        {/* Main line — CSS drop-shadow for glow, no SVG filter bbox artifact */}
         <motion.path
           d={CHART_D}
           stroke="#22C55E"
@@ -376,11 +380,10 @@ function AnalyticsVisual() {
           fill="none"
           style={{
             filter: 'drop-shadow(0 0 6px rgba(34,197,94,0.8)) drop-shadow(0 0 16px rgba(34,197,94,0.35))',
-            willChange: 'filter, transform',
+            willChange: 'filter',
           }}
           initial={{ pathLength: 0, opacity: 0 }}
-          whileInView={{ pathLength: 1, opacity: 0.9 }}
-          viewport={vp}
+          animate={inView ? { pathLength: 1, opacity: 0.9 } : undefined}
           transition={{ duration: 1.8, ease: 'easeOut', opacity: { duration: 0.15 } }}
         />
 
@@ -395,8 +398,7 @@ function AnalyticsVisual() {
               willChange: 'filter, transform',
             } : undefined}
             initial={{ opacity: 0, scale: 0 }}
-            whileInView={{ opacity: i === 2 ? 1 : 0.65, scale: 1 }}
-            viewport={vp}
+            animate={inView ? { opacity: i === 2 ? 1 : 0.65, scale: 1 } : undefined}
             transition={{ ...spring, delay: 0.7 + i * 0.45 }}
           />
         ))}
