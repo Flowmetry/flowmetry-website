@@ -7,8 +7,9 @@ import type { ReactNode } from 'react';
 // ─── Shared config ────────────────────────────────────────────────────────────
 
 const spring = { type: 'spring', stiffness: 100, damping: 20 } as const;
-// amount: 0.2 → triggers when 20% visible (fixes mobile non-trigger issue)
-const vp     = { once: true, margin: '-40px', amount: 0.2 } as const;
+// amount: 0.1 → fires when only 10 % visible — earlier trigger on mobile
+// margin '0px 0px -50px 0px' → bottom threshold 50 px inside viewport
+const vp     = { once: true, amount: 0.1, margin: '0px 0px -50px 0px' } as const;
 
 // ─── Card 1 — Chat Visual ────────────────────────────────────────────────────
 
@@ -313,7 +314,8 @@ const CHART_D = 'M10,108 C35,98 55,86 85,74 C115,62 138,52 165,42 C192,32 218,24
 
 function AnalyticsVisual() {
   return (
-    <div className="flex-1 flex items-center justify-center py-4 px-2">
+    // overflow:visible + extra padding give the CSS drop-shadow room to breathe
+    <div className="flex-1 flex items-center justify-center py-6 px-4" style={{ overflow: 'visible' }}>
       <svg
         viewBox="0 0 265 125"
         fill="none"
@@ -323,11 +325,8 @@ function AnalyticsVisual() {
         aria-hidden="true"
       >
         <defs>
-          {/* Line glow — generous percentage region for full path bbox */}
-          <filter id="ab-cf" x="-8%" y="-300%" width="116%" height="700%">
-            <feGaussianBlur in="SourceGraphic" stdDeviation="4.5" result="b"/>
-            <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
-          </filter>
+          {/* ab-cf SVG filter removed — it caused a visible rectangular bounding box
+              on mobile. Glow is now handled via CSS drop-shadow on the main line. */}
           <linearGradient id="ab-cg" x1="0%" y1="0%" x2="0%" y2="100%">
             <stop offset="0%" stopColor="#22C55E" stopOpacity="0.22"/>
             <stop offset="100%" stopColor="#22C55E" stopOpacity="0"/>
@@ -354,31 +353,33 @@ function AnalyticsVisual() {
           transition={{ duration: 0.6, delay: 1.6 }}
         />
 
-        {/* Glow blur layer — will-change for GPU compositing */}
+        {/* Glow ambient layer — thick soft stroke, no SVG filter (avoids bbox box artifact) */}
         <motion.path
           d={CHART_D}
           stroke="#22C55E"
-          strokeWidth={7}
+          strokeWidth={8}
           strokeLinecap="round"
           fill="none"
-          opacity={0.12}
-          filter="url(#ab-cf)"
-          style={{ willChange: 'filter' }}
+          opacity={0.13}
           initial={{ pathLength: 0 }}
           whileInView={{ pathLength: 1 }}
           viewport={vp}
           transition={{ duration: 1.8, ease: 'easeOut' }}
         />
 
-        {/* Main line */}
+        {/* Main line — CSS drop-shadow for glow; GPU-composited via will-change */}
         <motion.path
           d={CHART_D}
           stroke="#22C55E"
           strokeWidth={2}
           strokeLinecap="round"
           fill="none"
+          style={{
+            filter: 'drop-shadow(0 0 6px rgba(34,197,94,0.8)) drop-shadow(0 0 16px rgba(34,197,94,0.35))',
+            willChange: 'filter, transform',
+          }}
           initial={{ pathLength: 0, opacity: 0 }}
-          whileInView={{ pathLength: 1, opacity: 0.85 }}
+          whileInView={{ pathLength: 1, opacity: 0.9 }}
           viewport={vp}
           transition={{ duration: 1.8, ease: 'easeOut', opacity: { duration: 0.15 } }}
         />
@@ -391,7 +392,7 @@ function AnalyticsVisual() {
             fill="#22C55E"
             style={i === 2 ? {
               filter: 'drop-shadow(0 0 8px #22C55E) drop-shadow(0 0 16px rgba(34,197,94,0.45))',
-              willChange: 'filter',
+              willChange: 'filter, transform',
             } : undefined}
             initial={{ opacity: 0, scale: 0 }}
             whileInView={{ opacity: i === 2 ? 1 : 0.65, scale: 1 }}
