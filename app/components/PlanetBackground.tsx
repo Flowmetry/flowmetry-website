@@ -77,10 +77,16 @@ function Planet() {
   const { viewport } = useThree();
   const meshRef = useRef<THREE.Mesh>(null);
 
-  // Captured in a ref so subsequent viewport changes (mobile browser chrome) are ignored.
+  // Both scale and yOffset are captured once — never recalculated on resize/scroll.
+
+  // Scale: sphere fills 88% of the narrower viewport dimension, capped at 1.0 on desktop.
   const scale = useRef(
     Math.min(Math.min(viewport.width, viewport.height) * 0.293, 1.0)
   ).current;
+
+  // Y offset: push planet upward so it sits behind the hero headline, not screen-center.
+  // 18% of viewport height ≈ behind the headline/KPI band on all breakpoints.
+  const yOffset = useRef(viewport.height * 0.18).current;
 
   const colorMap = useLoader(THREE.TextureLoader, PLANET_TEX);
 
@@ -98,7 +104,7 @@ function Planet() {
   });
 
   return (
-    <mesh ref={meshRef} scale={scale}>
+    <mesh ref={meshRef} scale={scale} position={[0, yOffset, 0]}>
       <sphereGeometry args={[1.5, 96, 96]} />
       <meshStandardMaterial
         map={colorMap}
