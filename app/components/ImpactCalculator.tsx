@@ -101,8 +101,8 @@ export function ImpactCalculator() {
       id="roi"
       className="py-20 px-4 max-w-6xl mx-auto"
       style={{
-        maskImage: 'linear-gradient(to bottom, transparent, black 15%, black 85%, transparent)',
-        WebkitMaskImage: 'linear-gradient(to bottom, transparent, black 15%, black 85%, transparent)',
+        maskImage: 'linear-gradient(to bottom, transparent, black 6%, black 94%, transparent)',
+        WebkitMaskImage: 'linear-gradient(to bottom, transparent, black 6%, black 94%, transparent)',
       }}
     >
 
@@ -150,7 +150,8 @@ export function ImpactCalculator() {
           ROI-Rechner
         </span>
         <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-          Was kostet dich manuelle Arbeit?
+          Was kostet dich{' '}
+          <span className="text-red-500">manuelle Arbeit</span>?
         </h2>
         <p className="text-[#9CA3AF] max-w-xl mx-auto text-[15px]">
           Schätze deine manuellen Stunden – das Ergebnis rechnet live.

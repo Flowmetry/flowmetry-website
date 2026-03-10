@@ -225,15 +225,7 @@ function AutomationCore() {
           transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut', delay: 0.65 }}
         />
 
-        {/* Center dot */}
-        <div
-          style={{
-            position: 'relative', zIndex: 10,
-            width: 13, height: 13, borderRadius: '50%',
-            background: '#22D3EE',
-            boxShadow: '0 0 16px rgba(34,211,238,0.95), 0 0 36px rgba(34,211,238,0.5)',
-          }}
-        />
+        {/* Center dot removed — 3D planet is now the focal point */}
       </motion.div>
     </div>
   );
@@ -324,16 +316,16 @@ export function HeroSection() {
       {/* ── Floating atmospheric gradients ── */}
       <FloatingGradients />
 
-      {/* ── Dot grid — masked toward core ── */}
+      {/* ── Dot grid — larger transparent center so grid appears to pass behind planet ── */}
       <div
         className="absolute inset-0 opacity-[0.15] pointer-events-none"
         style={{
           backgroundImage: 'radial-gradient(circle, #3A4055 1px, transparent 1px)',
           backgroundSize: '28px 28px',
           maskImage:
-            'radial-gradient(ellipse 62% 52% at 50% 42%, transparent 18%, black 62%)',
+            'radial-gradient(ellipse 52% 44% at 50% 42%, transparent 32%, black 62%)',
           WebkitMaskImage:
-            'radial-gradient(ellipse 62% 52% at 50% 42%, transparent 18%, black 62%)',
+            'radial-gradient(ellipse 52% 44% at 50% 42%, transparent 32%, black 62%)',
         }}
       />
 
@@ -373,6 +365,18 @@ export function HeroSection() {
         >
           AI Automation Infrastruktur
         </motion.div>
+
+        {/* Headline glow — ultra-soft radial behind text for legibility against planet */}
+        <div
+          className="absolute left-1/2 -translate-x-1/2 pointer-events-none"
+          style={{
+            top: '18%',
+            width: 680,
+            height: 220,
+            background: 'radial-gradient(ellipse, rgba(59,130,246,0.07) 0%, transparent 70%)',
+            filter: 'blur(48px)',
+          }}
+        />
 
         {/* Headline — slides in from top */}
         <motion.h1

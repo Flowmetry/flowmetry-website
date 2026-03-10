@@ -220,8 +220,8 @@ export function KontaktSection() {
       id="kontakt"
       className="py-20 relative overflow-hidden"
       style={{
-        maskImage: 'linear-gradient(to bottom, transparent, black 15%, black 85%, transparent)',
-        WebkitMaskImage: 'linear-gradient(to bottom, transparent, black 15%, black 85%, transparent)',
+        maskImage: 'linear-gradient(to bottom, transparent, black 6%, black 94%, transparent)',
+        WebkitMaskImage: 'linear-gradient(to bottom, transparent, black 6%, black 94%, transparent)',
       }}
     >
 
@@ -244,7 +244,7 @@ export function KontaktSection() {
           viewport={{ once: true, margin: '-80px' }}
           transition={{ duration: 0.6, ease: 'easeOut' }}
         >
-          <h2 className="text-3xl md:text-4xl font-semibold mb-4">
+          <h2 className="text-3xl md:text-4xl font-semibold text-white mb-4">
             Kontakt{' '}
             <span className="bg-gradient-to-r from-[#3B82F6] to-[#22D3EE] bg-clip-text text-transparent">
               aufnehmen

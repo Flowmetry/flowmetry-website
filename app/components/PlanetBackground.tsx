@@ -1,8 +1,8 @@
 'use client';
 
 import { Suspense, useRef, useEffect, useState } from 'react';
-import { Canvas, useFrame, useThree, useLoader } from '@react-three/fiber';
-import { Stars } from '@react-three/drei';
+import { Canvas, useFrame, useLoader, useThree } from '@react-three/fiber';
+import { Stars, PerspectiveCamera } from '@react-three/drei';
 import * as THREE from 'three';
 
 /* ── Texture URL ─────────────────────────────────────────────────────────── */
@@ -54,29 +54,34 @@ function buildBumpMap(size: number): THREE.CanvasTexture {
   return new THREE.CanvasTexture(canvas);
 }
 
-/* ── Camera auto-fit for mobile ─────────────────────────────────────────── */
-
-function CameraFit() {
-  const { camera, size } = useThree();
-  useEffect(() => {
-    const cam = camera as THREE.PerspectiveCamera;
-    if (size.width < 768) {
-      const aspect = size.width / size.height;
-      cam.position.z = (1.5 / (Math.tan(25 * Math.PI / 180) * aspect)) * 1.1;
-    } else {
-      cam.position.z = 5;
-    }
-    cam.updateProjectionMatrix();
-  }, [camera, size]);
-  return null;
-}
-
-/* ── Planet — texture loaded via useLoader (suspends until ready) ─────────── */
+/* ── Planet ──────────────────────────────────────────────────────────────── */
+/*
+ * Scale is computed ONCE from the Three.js viewport (world-space dimensions at
+ * the camera near plane). This guarantees the sphere never clips left/right and
+ * never changes size when the mobile browser chrome appears/disappears on scroll.
+ *
+ * Math:
+ *   viewport.width  = 2 * z * tan(FOV/2) * aspect  (world units)
+ *   viewport.height = 2 * z * tan(FOV/2)
+ *
+ *   sphere_diameter = 2 * geometry_radius * scale
+ *
+ *   To fill 88% of the NARROWER viewport dimension with no clipping:
+ *     2 * 1.5 * scale = min(w, h) * 0.88
+ *     scale           = min(w, h) * 0.293
+ *
+ *   Capped at 1.0 so desktop (where height is narrower) keeps the current size.
+ */
 
 function Planet() {
+  const { viewport } = useThree();
   const meshRef = useRef<THREE.Mesh>(null);
 
-  // Suspends while fetching — Stars + lights stay visible during load
+  // Captured in a ref so subsequent viewport changes (mobile browser chrome) are ignored.
+  const scale = useRef(
+    Math.min(Math.min(viewport.width, viewport.height) * 0.293, 1.0)
+  ).current;
+
   const colorMap = useLoader(THREE.TextureLoader, PLANET_TEX);
 
   const [bumpTex, setBumpTex] = useState<THREE.CanvasTexture | null>(null);
@@ -93,7 +98,7 @@ function Planet() {
   });
 
   return (
-    <mesh ref={meshRef}>
+    <mesh ref={meshRef} scale={scale}>
       <sphereGeometry args={[1.5, 96, 96]} />
       <meshStandardMaterial
         map={colorMap}
@@ -114,13 +119,19 @@ export function PlanetBackground() {
   if (!mounted) return null;
 
   return (
+    /* position:fixed + inset:0 — canvas never scrolls or reflows */
     <div
       className="fixed inset-0 pointer-events-none"
       style={{ zIndex: 0 }}
     >
       <Canvas
-        camera={{ position: [0, 0, 5], fov: 50 }}
-        gl={{ antialias: true, alpha: true }}
+        gl={{
+          antialias: true,
+          alpha: true,
+          // Prevents blank frames when the compositor resamples the canvas
+          // during momentum scroll on iOS/Android.
+          preserveDrawingBuffer: true,
+        }}
         dpr={[1, 2]}
         style={{ background: 'transparent' }}
         onCreated={({ gl }) => {
@@ -128,31 +139,18 @@ export function PlanetBackground() {
           gl.toneMappingExposure = 0.8;
         }}
       >
-        {/* Stars — render immediately, no Suspense needed */}
-        <Stars
-          radius={100}
-          depth={50}
-          count={5000}
-          factor={4}
-          saturation={0}
-          fade
-        />
+        {/* Single camera for all breakpoints — scale handles sizing */}
+        <PerspectiveCamera makeDefault position={[0, 0, 5]} fov={50} />
 
-        {/* Lights — always on */}
+        {/* Stars */}
+        <Stars radius={100} depth={50} count={5000} factor={4} saturation={0} fade />
+
+        {/* Lights */}
         <ambientLight intensity={0.1} />
         <directionalLight position={[5, 3, 5]} intensity={1.5} color="#ffffff" />
-        <pointLight
-          position={[-5, -2, -5]}
-          intensity={8.0}
-          color="#3b82f6"
-          distance={20}
-          decay={2}
-        />
+        <pointLight position={[-5, -2, -5]} intensity={8.0} color="#3b82f6" distance={20} decay={2} />
 
-        {/* Camera rig */}
-        <CameraFit />
-
-        {/* Planet — suspends while texture fetches; stars + lights stay visible */}
+        {/* Planet — Suspense keeps stars + lights visible during texture fetch */}
         <Suspense fallback={null}>
           <Planet />
         </Suspense>

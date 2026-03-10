@@ -50,14 +50,14 @@ function DreiSchritteSection() {
       id="wie-es-funktioniert"
       className="py-20"
       style={{
-        maskImage: 'linear-gradient(to bottom, transparent, black 15%, black 85%, transparent)',
-        WebkitMaskImage: 'linear-gradient(to bottom, transparent, black 15%, black 85%, transparent)',
+        maskImage: 'linear-gradient(to bottom, transparent, black 6%, black 94%, transparent)',
+        WebkitMaskImage: 'linear-gradient(to bottom, transparent, black 6%, black 94%, transparent)',
       }}
     >
       <div className="max-w-5xl mx-auto px-6 md:px-8">
 
         <div className="text-center mb-14">
-          <h2 className="text-3xl md:text-4xl font-semibold mb-3">
+          <h2 className="text-3xl md:text-4xl font-semibold text-white mb-3">
             In 3 Schritten{" "}
             <span className="bg-gradient-to-r from-[#3B82F6] to-[#22D3EE] bg-clip-text text-transparent">
               zum System
@@ -366,14 +366,16 @@ function FAQSection() {
       id="faq"
       className="py-20"
       style={{
-        maskImage: 'linear-gradient(to bottom, transparent, black 15%, black 85%, transparent)',
-        WebkitMaskImage: 'linear-gradient(to bottom, transparent, black 15%, black 85%, transparent)',
+        maskImage: 'linear-gradient(to bottom, transparent, black 6%, black 94%, transparent)',
+        WebkitMaskImage: 'linear-gradient(to bottom, transparent, black 6%, black 94%, transparent)',
       }}
     >
       <div className="max-w-3xl mx-auto px-6">
         <div className="text-center mb-14">
           <h2 className="text-3xl md:text-4xl font-semibold mb-4">
-            Häufige Fragen
+            <span className="bg-gradient-to-r from-[#3B82F6] to-[#22D3EE] bg-clip-text text-transparent">
+              Häufige Fragen
+            </span>
           </h2>
           <p className="text-[#9CA3AF]">
             Antworten auf die wichtigsten Fragen zu unserer Arbeitsweise.
@@ -424,8 +426,8 @@ function FinalCtaSection() {
     <section
       className="py-28 relative overflow-hidden"
       style={{
-        maskImage: 'linear-gradient(to bottom, transparent, black 15%, black 85%, transparent)',
-        WebkitMaskImage: 'linear-gradient(to bottom, transparent, black 15%, black 85%, transparent)',
+        maskImage: 'linear-gradient(to bottom, transparent, black 6%, black 94%, transparent)',
+        WebkitMaskImage: 'linear-gradient(to bottom, transparent, black 6%, black 94%, transparent)',
       }}
     >
       {/* Mesh gradient — dark blue/violet depth */}
