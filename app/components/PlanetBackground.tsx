@@ -115,19 +115,32 @@ function Planet() {
 /* ── Export ──────────────────────────────────────────────────────────────── */
 
 export function PlanetBackground() {
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => setMounted(true), []);
-  if (!mounted) return null;
+  // Capture viewport dimensions ONCE on mount and never update them.
+  // Mobile browser chrome (address bar) changes window.innerHeight on every scroll,
+  // which would resize the canvas and trigger R3F's ResizeObserver → camera aspect
+  // update → sphere jumps. Locking to a fixed pixel height breaks that chain.
+  const [dims, setDims] = useState<{ height: number; cameraZ: number } | null>(null);
 
-  // Computed once after mount — stable, never recalculates on scroll or resize.
-  // Mobile (< 768 px): camera pulled back so the full sphere fits the narrow viewport.
-  const cameraZ = window.innerWidth < 768 ? 8 : 5;
+  useEffect(() => {
+    setDims({
+      height: window.innerHeight,                    // snapshot — never recalculated
+      cameraZ: window.innerWidth < 768 ? 8 : 5,     // mobile camera distance
+    });
+  }, []);  // empty deps → runs exactly once
+
+  if (!dims) return null;
+
+  const { height, cameraZ } = dims;
 
   return (
-    /* position:fixed + inset:0 — canvas never scrolls or reflows */
+    /* Fixed position, pixel-locked height — canvas never resizes on scroll */
     <div
-      className="fixed inset-0 pointer-events-none"
-      style={{ zIndex: 0 }}
+      className="fixed inset-x-0 top-0 pointer-events-none"
+      style={{
+        zIndex: 0,
+        height: `${height}px`,  // pixel value; 100vh/dvh would re-trigger on chrome toggle
+        touchAction: 'none',    // canvas must not consume touch gestures meant for scroll
+      }}
     >
       <Canvas
         gl={{
