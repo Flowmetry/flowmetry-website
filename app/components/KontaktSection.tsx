@@ -1,7 +1,7 @@
 'use client';
 
-import { motion } from 'framer-motion';
-import { useState } from 'react';
+import { motion, useInView } from 'framer-motion';
+import { useState, useRef } from 'react';
 
 const WEBHOOK_URL = 'https://n8n.flowmetry.ai/webhook/contact-form';
 
@@ -36,13 +36,33 @@ function OnlineIndicator() {
   );
 }
 
-/* ── Shared input className ───────────────────────────────────────────────── */
+/* ── Field wrapper — capsule with focus glow ──────────────────────────────── */
+
+function FieldWrap({ children }: { children: React.ReactNode }) {
+  const [focused, setFocused] = useState(false);
+  return (
+    <div
+      onFocusCapture={() => setFocused(true)}
+      onBlurCapture={() => setFocused(false)}
+      className="rounded-lg transition-all duration-300"
+      style={{
+        background: focused ? 'rgba(255,255,255,0.1)' : 'rgba(255,255,255,0.06)',
+        border: `1px solid ${focused ? 'rgba(34,211,238,0.42)' : 'rgba(255,255,255,0.1)'}`,
+        boxShadow: focused
+          ? '0 0 0 3px rgba(34,211,238,0.08), 0 0 22px rgba(34,211,238,0.14)'
+          : '0 0 16px rgba(59,130,246,0.08)',
+      }}
+    >
+      {children}
+    </div>
+  );
+}
+
+/* ── Input / textarea inner className ─────────────────────────────────────── */
 
 const fieldCls =
-  'w-full py-3.5 bg-transparent border-b border-white/10 text-white text-sm ' +
-  'placeholder:text-[#6B7280] focus:outline-none focus:border-cyan-400/50 ' +
-  'focus:shadow-[0_5px_20px_-8px_rgba(34,211,238,0.42)] ' +
-  'transition-[border-color,box-shadow] duration-300';
+  'w-full px-4 py-3.5 bg-transparent text-white text-sm ' +
+  'placeholder:text-[#6B7280] focus:outline-none';
 
 /* ── Contact Form ─────────────────────────────────────────────────────────── */
 
@@ -50,8 +70,9 @@ function ContactForm() {
   const [fields, setFields] = useState({ name: '', email: '', company: '', message: '' });
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
 
-  const set = (key: keyof typeof fields) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
-    setFields((prev) => ({ ...prev, [key]: e.target.value }));
+  const set = (key: keyof typeof fields) =>
+    (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
+      setFields((prev) => ({ ...prev, [key]: e.target.value }));
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -94,33 +115,38 @@ function ContactForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-7">
-      <div className="grid grid-cols-2 gap-8">
+    <form onSubmit={handleSubmit} className="space-y-5">
+
+      <div className="grid grid-cols-2 gap-4">
         <div>
           <label className="block text-[10px] font-semibold tracking-[0.18em] text-[#4B5563] uppercase mb-3.5">
             Name
           </label>
-          <input
-            type="text"
-            required
-            placeholder="Dein Name"
-            value={fields.name}
-            onChange={set('name')}
-            className={fieldCls}
-          />
+          <FieldWrap>
+            <input
+              type="text"
+              required
+              placeholder="Dein Name"
+              value={fields.name}
+              onChange={set('name')}
+              className={fieldCls}
+            />
+          </FieldWrap>
         </div>
         <div>
           <label className="block text-[10px] font-semibold tracking-[0.18em] text-[#4B5563] uppercase mb-3.5">
             E-Mail
           </label>
-          <input
-            type="email"
-            required
-            placeholder="du@unternehmen.de"
-            value={fields.email}
-            onChange={set('email')}
-            className={fieldCls}
-          />
+          <FieldWrap>
+            <input
+              type="email"
+              required
+              placeholder="du@unternehmen.de"
+              value={fields.email}
+              onChange={set('email')}
+              className={fieldCls}
+            />
+          </FieldWrap>
         </div>
       </div>
 
@@ -128,27 +154,31 @@ function ContactForm() {
         <label className="block text-[10px] font-semibold tracking-[0.18em] text-[#4B5563] uppercase mb-3.5">
           Unternehmen
         </label>
-        <input
-          type="text"
-          placeholder="Dein Unternehmen (optional)"
-          value={fields.company}
-          onChange={set('company')}
-          className={fieldCls}
-        />
+        <FieldWrap>
+          <input
+            type="text"
+            placeholder="Dein Unternehmen (optional)"
+            value={fields.company}
+            onChange={set('company')}
+            className={fieldCls}
+          />
+        </FieldWrap>
       </div>
 
       <div>
         <label className="block text-[10px] font-semibold tracking-[0.18em] text-[#4B5563] uppercase mb-3.5">
           Was möchtest du automatisieren?
         </label>
-        <textarea
-          required
-          rows={4}
-          placeholder="Beschreibe kurz, welche Prozesse du automatisieren möchtest..."
-          value={fields.message}
-          onChange={set('message')}
-          className={`${fieldCls} resize-none`}
-        />
+        <FieldWrap>
+          <textarea
+            required
+            rows={4}
+            placeholder="Beschreibe kurz, welche Prozesse du automatisieren möchtest..."
+            value={fields.message}
+            onChange={set('message')}
+            className={`${fieldCls} resize-none`}
+          />
+        </FieldWrap>
       </div>
 
       {status === 'error' && (
@@ -168,15 +198,33 @@ function ContactForm() {
       >
         {status === 'loading' ? 'Wird gesendet…' : 'Nachricht senden'}
       </motion.button>
+
     </form>
   );
 }
 
 /* ── Main Section ─────────────────────────────────────────────────────────── */
 
+const TRUST_ITEMS = [
+  'Kostenlose Erstanalyse – unverbindlich',
+  'Innerhalb von 2–4 Wochen live',
+  'Maßgeschneidert, kein Template',
+];
+
 export function KontaktSection() {
+  const trustRef = useRef<HTMLDivElement>(null);
+  const trustInView = useInView(trustRef, { once: true, margin: '-40px' });
+
   return (
-    <section id="kontakt" className="py-20 relative overflow-hidden">
+    <section
+      id="kontakt"
+      className="py-20 relative overflow-hidden"
+      style={{
+        maskImage: 'linear-gradient(to bottom, transparent, black 15%, black 85%, transparent)',
+        WebkitMaskImage: 'linear-gradient(to bottom, transparent, black 15%, black 85%, transparent)',
+      }}
+    >
+
       {/* Background glow */}
       <div
         className="absolute inset-0 pointer-events-none"
@@ -188,7 +236,7 @@ export function KontaktSection() {
 
       <div className="relative max-w-6xl mx-auto px-6 md:px-8">
 
-        {/* Section heading */}
+        {/* Section heading — untouched */}
         <motion.div
           className="text-center mb-14"
           initial={{ opacity: 0, y: 50 }}
@@ -207,62 +255,92 @@ export function KontaktSection() {
           </p>
         </motion.div>
 
-        {/* 2-column grid */}
+        {/* ── Terminal container ── */}
         <motion.div
-          className="grid grid-cols-1 md:grid-cols-2 gap-14 md:gap-20 items-start max-w-5xl mx-auto"
+          className="max-w-5xl mx-auto rounded-2xl p-8 md:p-10 lg:p-12"
+          style={{
+            background: 'rgba(255,255,255,0.04)',
+            border: '0.5px solid rgba(255,255,255,0.07)',
+            boxShadow:
+              '0 0 0 1px rgba(255,255,255,0.04), 0 0 70px rgba(59,130,246,0.14), 0 0 150px rgba(59,130,246,0.07), 0 0 40px rgba(34,211,238,0.04)',
+            backdropFilter: 'blur(32px)',
+            WebkitBackdropFilter: 'blur(32px)',
+          }}
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-80px' }}
           transition={{ duration: 0.6, ease: 'easeOut', delay: 0.12 }}
         >
+          <div className="grid grid-cols-1 md:grid-cols-2 items-start">
 
-          {/* ── Left: text + indicator ── */}
-          <div className="flex flex-col gap-8 pt-1 md:pt-3">
-            <div>
-              <h3 className="text-2xl font-semibold text-white mb-3 leading-snug">
-                Bereit für das<br />nächste Level?
-              </h3>
-              <p className="text-[#9CA3AF] leading-relaxed">
-                Lass uns gemeinsam schauen, wo wir bei dir Zeit und Kosten einsparen können.
-              </p>
+            {/* ── Left: pitch + indicator + checklist ── */}
+            <div className="flex flex-col gap-8 pt-1 md:pt-2 md:pr-10 md:border-r md:border-white/[0.06] mb-10 md:mb-0">
+
+              <div>
+                <h3 className="text-2xl font-semibold text-white mb-3 leading-snug">
+                  Bereit für das<br />nächste Level?
+                </h3>
+                <p className="text-[#B4BEC9] leading-relaxed">
+                  Lass uns gemeinsam schauen, wo wir bei dir Zeit und Kosten einsparen können.
+                </p>
+              </div>
+
+              <OnlineIndicator />
+
+              {/* Animated checkmark trust list */}
+              <div ref={trustRef} className="flex flex-col gap-3">
+                {TRUST_ITEMS.map((item, i) => (
+                  <div key={item} className="flex items-center gap-2.5">
+                    <svg
+                      width="15" height="15" viewBox="0 0 15 15" fill="none"
+                      className="flex-shrink-0"
+                    >
+                      <motion.path
+                        d="M2.5 7.5L5.5 10.5L12.5 4"
+                        stroke="rgba(59,130,246,0.8)"
+                        strokeWidth="1.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        initial={{ pathLength: 0, opacity: 0 }}
+                        animate={
+                          trustInView
+                            ? { pathLength: 1, opacity: 1 }
+                            : { pathLength: 0, opacity: 0 }
+                        }
+                        transition={{
+                          pathLength: { duration: 0.4, ease: 'easeOut', delay: 0.2 + i * 0.12 },
+                          opacity:    { duration: 0.05, delay: 0.2 + i * 0.12 },
+                        }}
+                      />
+                    </svg>
+                    <span className="text-sm text-[#9CA3AF]">{item}</span>
+                  </div>
+                ))}
+              </div>
+
             </div>
 
-            <OnlineIndicator />
-
-            {/* Trust points */}
-            <div className="flex flex-col gap-2.5">
-              {[
-                'Kostenlose Erstanalyse – unverbindlich',
-                'Innerhalb von 2–4 Wochen live',
-                'Maßgeschneidert, kein Template',
-              ].map((item) => (
-                <div key={item} className="flex items-center gap-2.5">
-                  <div
-                    className="w-1.5 h-1.5 rounded-full flex-shrink-0"
-                    style={{ background: 'rgba(59,130,246,0.65)' }}
-                  />
-                  <span className="text-sm text-[#9CA3AF]">{item}</span>
-                </div>
-              ))}
+            {/* ── Right: form ── */}
+            <div className="md:pl-10">
+              <ContactForm />
             </div>
+
           </div>
-
-          {/* ── Right: form ── */}
-          <div>
-            <ContactForm />
-
-            <p className="text-center text-[#4B5563] text-xs mt-5">
-              Oder direkt per E-Mail:{' '}
-              <a
-                href="mailto:kontakt@flowmetry.ai"
-                className="text-[#9CA3AF] hover:text-white transition-colors"
-              >
-                kontakt@flowmetry.ai
-              </a>
-            </p>
-          </div>
-
         </motion.div>
+
+        {/* ── Footer — email ── */}
+        <div className="max-w-5xl mx-auto">
+          <p className="text-center text-[#4B5563] text-xs mt-8">
+            Oder direkt per E-Mail:{' '}
+            <a
+              href="mailto:kontakt@flowmetry.ai"
+              className="text-[#9CA3AF] hover:text-white transition-colors"
+            >
+              kontakt@flowmetry.ai
+            </a>
+          </p>
+        </div>
+
       </div>
     </section>
   );

@@ -7,7 +7,7 @@ import type { ReactNode } from 'react';
 // ─── Shared config ────────────────────────────────────────────────────────────
 
 const spring = { type: 'spring', stiffness: 100, damping: 20 } as const;
-const vp     = { once: true, margin: '-100px' } as const;
+const vp     = { once: true, margin: '-60px' } as const;
 
 // ─── Card 1 — Chat Visual ────────────────────────────────────────────────────
 
@@ -318,12 +318,18 @@ function AnalyticsVisual() {
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
         className="w-full"
-        style={{ overflow: 'visible' }}
+        style={{ overflow: 'visible', transform: 'translateZ(0)' }}
         aria-hidden="true"
       >
         <defs>
-          <filter id="ab-cf" x="-20%" y="-100%" width="140%" height="300%">
+          {/* Line glow — percentage-based, generous region for the full path bbox */}
+          <filter id="ab-cf" x="-8%" y="-300%" width="116%" height="700%">
             <feGaussianBlur in="SourceGraphic" stdDeviation="4.5" result="b"/>
+            <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+          {/* End-dot glow — absolute coords so tiny bbox never clips the blur */}
+          <filter id="ab-dot-f" filterUnits="userSpaceOnUse" x="228" y="-10" width="54" height="54">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="5" result="b"/>
             <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
           </filter>
           <linearGradient id="ab-cg" x1="0%" y1="0%" x2="0%" y2="100%">
@@ -386,7 +392,7 @@ function AnalyticsVisual() {
             key={i}
             cx={cx} cy={cy} r={i === 2 ? 4 : 3}
             fill="#22C55E"
-            filter={i === 2 ? 'url(#ab-cf)' : undefined}
+            filter={i === 2 ? 'url(#ab-dot-f)' : undefined}
             initial={{ opacity: 0, scale: 0 }}
             whileInView={{ opacity: i === 2 ? 1 : 0.65, scale: 1 }}
             viewport={vp}
@@ -415,9 +421,11 @@ function BentoCard({
     <motion.div
       className={`flex flex-col rounded-2xl p-7 ${className}`}
       style={{
-        background: 'rgba(10,12,20,0.96)',
+        background: 'rgba(255,255,255,0.04)',
         border: '0.5px solid rgba(255,255,255,0.08)',
         boxShadow: `0 0 60px ${glowColor}1C, 0 0 120px ${glowColor}0A, inset 0 1px 0 ${glowColor}12`,
+        backdropFilter: 'blur(28px)',
+        WebkitBackdropFilter: 'blur(28px)',
       }}
       initial={{ opacity: 0, y: 32 }}
       whileInView={{ opacity: 1, y: 0 }}
@@ -446,7 +454,13 @@ function PillarLabel({ num, color }: { num: string; color: string }) {
 
 export function AutomationBento() {
   return (
-    <section className="py-20">
+    <section
+      className="py-20"
+      style={{
+        maskImage: 'linear-gradient(to bottom, transparent, black 15%, black 85%, transparent)',
+        WebkitMaskImage: 'linear-gradient(to bottom, transparent, black 15%, black 85%, transparent)',
+      }}
+    >
       <div className="max-w-6xl mx-auto px-6 md:px-8">
 
         <motion.div

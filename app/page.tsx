@@ -6,6 +6,7 @@ import { AutomationBento } from "./components/AutomationBento";
 import { ProblemSection } from "./components/ProblemSection";
 import { KontaktSection } from "./components/KontaktSection";
 import { HeroSection } from "./components/HeroSection";
+import { PlanetBackground } from "./components/PlanetBackground";
 
 // ─── Icons ─────────────────────────────────────────────────────────────────── (moved to client components)
 
@@ -45,7 +46,14 @@ function Nav() {
 
 function DreiSchritteSection() {
   return (
-    <section id="wie-es-funktioniert" className="py-20">
+    <section
+      id="wie-es-funktioniert"
+      className="py-20"
+      style={{
+        maskImage: 'linear-gradient(to bottom, transparent, black 15%, black 85%, transparent)',
+        WebkitMaskImage: 'linear-gradient(to bottom, transparent, black 15%, black 85%, transparent)',
+      }}
+    >
       <div className="max-w-5xl mx-auto px-6 md:px-8">
 
         <div className="text-center mb-14">
@@ -67,9 +75,11 @@ function DreiSchritteSection() {
             <div
               className="min-h-[420px] flex flex-col rounded-2xl p-7"
               style={{
-                background: "rgba(10,12,20,0.96)",
+                background: "rgba(255,255,255,0.04)",
                 border: "0.5px solid rgba(255,255,255,0.08)",
                 boxShadow: "0 0 60px rgba(59,130,246,0.11), 0 0 120px rgba(59,130,246,0.05), inset 0 1px 0 rgba(59,130,246,0.06)",
+                backdropFilter: "blur(28px)",
+                WebkitBackdropFilter: "blur(28px)",
               }}
             >
               <div className="flex items-center justify-between mb-5">
@@ -152,7 +162,7 @@ function DreiSchritteSection() {
             <div
               className="min-h-[420px] flex flex-col rounded-2xl p-7"
               style={{
-                background: "rgba(10,12,20,0.96)",
+                background: "rgba(255,255,255,0.04)",
                 border: "0.5px solid rgba(255,255,255,0.08)",
                 boxShadow: "0 0 60px rgba(34,211,238,0.10), 0 0 120px rgba(34,211,238,0.04), inset 0 1px 0 rgba(34,211,238,0.06)",
               }}
@@ -237,7 +247,7 @@ function DreiSchritteSection() {
             <div
               className="min-h-[420px] flex flex-col rounded-2xl p-7"
               style={{
-                background: "rgba(10,12,20,0.96)",
+                background: "rgba(255,255,255,0.04)",
                 border: "0.5px solid rgba(255,255,255,0.08)",
                 boxShadow: "0 0 60px rgba(34,197,94,0.09), 0 0 120px rgba(34,197,94,0.04), inset 0 1px 0 rgba(34,197,94,0.06)",
               }}
@@ -352,7 +362,14 @@ const faqs = [
 
 function FAQSection() {
   return (
-    <section id="faq" className="py-20">
+    <section
+      id="faq"
+      className="py-20"
+      style={{
+        maskImage: 'linear-gradient(to bottom, transparent, black 15%, black 85%, transparent)',
+        WebkitMaskImage: 'linear-gradient(to bottom, transparent, black 15%, black 85%, transparent)',
+      }}
+    >
       <div className="max-w-3xl mx-auto px-6">
         <div className="text-center mb-14">
           <h2 className="text-3xl md:text-4xl font-semibold mb-4">
@@ -367,28 +384,29 @@ function FAQSection() {
           {faqs.map(({ question, answer }) => (
             <details
               key={question}
-              className="group bg-[#161A22] border border-[#2A2F3A] rounded-xl overflow-hidden"
+              className="group rounded-xl overflow-hidden"
+              style={{
+                background: 'rgba(255,255,255,0.04)',
+                border: '0.5px solid rgba(255,255,255,0.08)',
+                backdropFilter: 'blur(20px)',
+                WebkitBackdropFilter: 'blur(20px)',
+              }}
             >
-              <summary className="flex items-center justify-between px-6 py-5 cursor-pointer list-none hover:bg-white/[0.02] transition-colors">
+              <summary className="flex items-center justify-between px-6 py-5 cursor-pointer list-none hover:bg-white/[0.03] transition-colors">
                 <span className="font-medium pr-6">{question}</span>
-                <span className="w-7 h-7 flex items-center justify-center flex-shrink-0 border border-[#2A2F3A] rounded-full text-[#9CA3AF] group-open:rotate-45 transition-transform duration-200">
-                  <svg
-                    width="12"
-                    height="12"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth={2}
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M12 4.5v15m7.5-7.5h-15"
-                    />
+                <span
+                  className="w-7 h-7 flex items-center justify-center flex-shrink-0 rounded-full text-[#9CA3AF] group-open:rotate-45 transition-transform duration-200"
+                  style={{ border: '0.5px solid rgba(255,255,255,0.12)' }}
+                >
+                  <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                   </svg>
                 </span>
               </summary>
-              <div className="px-6 pb-5 text-[#9CA3AF] text-sm leading-relaxed border-t border-[#2A2F3A] pt-4">
+              <div
+                className="px-6 pb-5 text-[#9CA3AF] text-sm leading-relaxed pt-4"
+                style={{ borderTop: '0.5px solid rgba(255,255,255,0.06)' }}
+              >
                 {answer}
               </div>
             </details>
@@ -403,7 +421,13 @@ function FAQSection() {
 
 function FinalCtaSection() {
   return (
-    <section className="py-28 relative overflow-hidden">
+    <section
+      className="py-28 relative overflow-hidden"
+      style={{
+        maskImage: 'linear-gradient(to bottom, transparent, black 15%, black 85%, transparent)',
+        WebkitMaskImage: 'linear-gradient(to bottom, transparent, black 15%, black 85%, transparent)',
+      }}
+    >
       {/* Mesh gradient — dark blue/violet depth */}
       <div
         className="absolute inset-0 pointer-events-none"
@@ -449,9 +473,6 @@ function FinalCtaSection() {
 function Footer() {
   return (
     <footer>
-      {/* Gradient separator */}
-      <div className="h-[1px] bg-gradient-to-r from-transparent via-white/20 to-transparent" />
-
       <div className="py-10">
         <div className="max-w-6xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-6">
           <a href="/">
@@ -493,44 +514,11 @@ function Footer() {
 
 export default function Home() {
   return (
-    <div className="bg-[#0F1115] text-white min-h-screen relative">
+    <div className="text-white min-h-screen relative">
       <ScrollProgress />
+      <PlanetBackground />
 
-      {/* Global dot grid */}
-      <div
-        className="fixed inset-0 opacity-[0.07] pointer-events-none z-0"
-        style={{
-          backgroundImage: "radial-gradient(circle, #3B82F6 1px, transparent 1px)",
-          backgroundSize: "32px 32px",
-        }}
-      />
-
-      {/* Glow zone 1 – top / hero area */}
-      <div
-        className="fixed top-0 left-1/2 -translate-x-1/2 w-[900px] h-[600px] pointer-events-none z-0"
-        style={{
-          background:
-            "radial-gradient(ellipse at 50% 0%, rgba(59,130,246,0.08) 0%, transparent 70%)",
-        }}
-      />
-      {/* Glow zone 2 – mid-page */}
-      <div
-        className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[500px] pointer-events-none z-0"
-        style={{
-          background:
-            "radial-gradient(ellipse at 50% 50%, rgba(34,211,238,0.05) 0%, transparent 70%)",
-        }}
-      />
-      {/* Glow zone 3 – bottom / CTA area */}
-      <div
-        className="fixed bottom-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] pointer-events-none z-0"
-        style={{
-          background:
-            "radial-gradient(ellipse at 50% 100%, rgba(59,130,246,0.07) 0%, transparent 70%)",
-        }}
-      />
-
-      <div className="relative z-10">
+      <div className="relative z-20">
         <Nav />
         <HeroSection />
         <Reveal><DreiSchritteSection /></Reveal>

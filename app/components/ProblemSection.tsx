@@ -224,24 +224,27 @@ function PainPoint({ num, title, description, visual, delay, isLast = false }: P
       </div>
 
       {/* Content */}
-      <div className="flex-1 relative min-w-0">
-        {/* Large background number */}
-        <span
-          className="absolute -top-5 -left-1 text-[90px] font-black leading-none select-none pointer-events-none"
-          style={{ color: 'rgba(255,255,255,0.025)' }}
-          aria-hidden="true"
+      <div className="flex-1 min-w-0">
+
+        {/* Visual + number stacked — number definitively behind animation */}
+        <div
+          className="relative mb-4"
+          style={{ isolation: 'isolate' }}
         >
-          {num}
-        </span>
+          {/* Number — z:-10 within isolated stacking context */}
+          <span
+            className="absolute -z-10 pointer-events-none select-none top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[90px] font-black leading-none text-white/20"
+            aria-hidden="true"
+          >
+            {num}
+          </span>
 
-        {/* Animated visual */}
-        <div className="mb-4 relative z-10">{visual}</div>
+          {/* Animated visual — on top */}
+          <div className="relative z-10">{visual}</div>
+        </div>
 
-        {/* Title */}
-        <h3 className="text-lg font-semibold text-white mb-2 relative z-10">{title}</h3>
-
-        {/* Description */}
-        <p className="text-[#9CA3AF] text-sm leading-relaxed relative z-10">{description}</p>
+        <h3 className="text-lg font-semibold text-white mb-2">{title}</h3>
+        <p className="text-[#9CA3AF] text-sm leading-relaxed">{description}</p>
       </div>
     </motion.div>
   );
@@ -272,7 +275,13 @@ function OrderPanel() {
 
 export function ProblemSection() {
   return (
-    <section className="py-20 relative overflow-hidden">
+    <section
+      className="py-20 relative overflow-hidden"
+      style={{
+        maskImage: 'linear-gradient(to bottom, transparent, black 15%, black 85%, transparent)',
+        WebkitMaskImage: 'linear-gradient(to bottom, transparent, black 15%, black 85%, transparent)',
+      }}
+    >
       {/* Flickering danger glow */}
       <motion.div
         className="absolute inset-0 pointer-events-none"

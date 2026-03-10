@@ -303,7 +303,13 @@ function ScrollIncentive() {
 
 export function HeroSection() {
   return (
-    <section className="relative overflow-hidden pt-[120px] pb-28">
+    <section
+      className="relative overflow-hidden pt-[120px] pb-28"
+      style={{
+        maskImage: 'linear-gradient(to bottom, black 75%, transparent)',
+        WebkitMaskImage: 'linear-gradient(to bottom, black 75%, transparent)',
+      }}
+    >
 
       {/* ROI calculator CSS — injected here for global availability */}
       <style>{`
