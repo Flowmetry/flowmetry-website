@@ -46,7 +46,12 @@ export async function POST(req: NextRequest) {
   try {
     const res = await fetch(webhookUrl, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        ...(process.env.N8N_AUTH_KEY
+          ? { Authorization: `Bearer ${process.env.N8N_AUTH_KEY}` }
+          : {}),
+      },
       body: JSON.stringify(body),
     });
     if (!res.ok) throw new Error(`Webhook returned ${res.status}`);
