@@ -67,8 +67,9 @@ const fieldCls =
 /* ── Contact Form ─────────────────────────────────────────────────────────── */
 
 function ContactForm() {
-  const [fields, setFields] = useState({ name: '', email: '', company: '', message: '' });
-  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  const [fields, setFields]   = useState({ name: '', email: '', company: '', message: '' });
+  const [consent, setConsent] = useState(false);
+  const [status, setStatus]   = useState<'idle' | 'loading' | 'success' | 'error' | 'rate-limited'>('idle');
 
   const set = (key: keyof typeof fields) =>
     (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
@@ -83,9 +84,11 @@ function ContactForm() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(fields),
       });
+      if (res.status === 429) { setStatus('rate-limited'); return; }
       if (!res.ok) throw new Error('Request failed');
       setStatus('success');
       setFields({ name: '', email: '', company: '', message: '' });
+      setConsent(false);
     } catch {
       setStatus('error');
     }
@@ -181,8 +184,29 @@ function ContactForm() {
         </FieldWrap>
       </div>
 
+      {/* DSGVO-Einwilligung */}
+      <div className="flex items-start gap-3">
+        <input
+          type="checkbox"
+          id="gdpr-consent"
+          required
+          checked={consent}
+          onChange={(e) => setConsent(e.target.checked)}
+          className="mt-0.5 w-4 h-4 flex-shrink-0 cursor-pointer accent-blue-500"
+        />
+        <label htmlFor="gdpr-consent" className="text-xs text-[#6B7280] leading-relaxed cursor-pointer select-none">
+          Ich stimme zu, dass meine Angaben zur Kontaktaufnahme gespeichert werden.{' '}
+          <a href="/datenschutz" className="text-[#60A5FA] hover:text-white transition-colors underline underline-offset-2">
+            Datenschutzerklärung
+          </a>
+        </label>
+      </div>
+
       {status === 'error' && (
         <p className="text-sm text-red-400">Etwas ist schiefgelaufen. Bitte versuche es erneut.</p>
+      )}
+      {status === 'rate-limited' && (
+        <p className="text-sm text-orange-400">Bitte warte 60 Sekunden vor der nächsten Anfrage.</p>
       )}
 
       <motion.button
