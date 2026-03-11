@@ -3,7 +3,7 @@
 import { motion, useInView } from 'framer-motion';
 import { useState, useRef } from 'react';
 
-const WEBHOOK_URL = 'https://n8n.flowmetry.ai/webhook/contact-form';
+const WEBHOOK_URL = '/api/contact';
 
 /* ── Online Indicator ─────────────────────────────────────────────────────── */
 
