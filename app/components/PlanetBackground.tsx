@@ -7,8 +7,7 @@ import * as THREE from 'three';
 
 /* ── Texture URL ─────────────────────────────────────────────────────────── */
 
-const PLANET_TEX =
-  'https://raw.githubusercontent.com/mrdoob/three.js/master/examples/textures/planets/earth_atmos_2048.jpg';
+const PLANET_TEX = '/earth_atmos_2048.jpg';
 
 /* ── Procedural bump map (noise) ─────────────────────────────────────────── */
 

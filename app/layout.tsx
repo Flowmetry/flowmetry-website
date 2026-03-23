@@ -5,7 +5,7 @@ import { CookieConsent } from "./components/CookieConsent";
 
 const poppins = Poppins({
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+  weight: ["200", "300", "400"],
   variable: "--font-poppins",
   display: "swap",
 });
@@ -22,8 +22,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="de">
-      <body className={`${poppins.variable} font-sans antialiased bg-[#0F1115] text-white`}>
+    <html lang="de" className="overflow-x-hidden">
+      <body className={`${poppins.variable} font-sans antialiased bg-black text-white overflow-x-hidden`}>
         {children}
         <CookieConsent />
       </body>

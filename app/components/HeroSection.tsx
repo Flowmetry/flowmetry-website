@@ -1,170 +1,130 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import { HoverBorderGradient } from './HoverBorderGradient';
 
-/* ── Floating atmospheric gradients ─────────────────────────────────────── */
+/* ── KPI icon helpers ──────────────────────────────────────────────────────── */
 
-function FloatingGradients() {
-  return (
-    <>
-      {/* Deep blue — top-left */}
-      <motion.div
-        className="absolute pointer-events-none"
-        style={{
-          width: 720, height: 520,
-          background: 'radial-gradient(ellipse, rgba(59,130,246,0.10) 0%, transparent 70%)',
-          left: '8%', top: '-18%',
-        }}
-        animate={{ x: [0, 38, -22, 14, 0], y: [0, -28, 36, -12, 0] }}
-        transition={{ duration: 30, repeat: Infinity, ease: 'easeInOut' }}
-      />
+const IconCalendar = () => (
+  <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8} className="text-blue-400">
+    <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
+  </svg>
+);
 
-      {/* Violet — bottom-right */}
-      <motion.div
-        className="absolute pointer-events-none"
-        style={{
-          width: 620, height: 500,
-          background: 'radial-gradient(ellipse, rgba(139,92,246,0.08) 0%, transparent 70%)',
-          right: '4%', bottom: '-22%',
-        }}
-        animate={{ x: [0, -32, 24, -14, 0], y: [0, 32, -28, 16, 0] }}
-        transition={{ duration: 24, repeat: Infinity, ease: 'easeInOut', delay: 8 }}
-      />
-    </>
-  );
-}
+const IconAutopilot = () => (
+  <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8} className="text-cyan-400">
+    <path strokeLinecap="round" strokeLinejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+  </svg>
+);
+
+const IconSaved = () => (
+  <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8} className="text-green-400">
+    <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 18 9 11.25l4.306 4.306a11.95 11.95 0 0 1 5.814-5.518l2.74-1.22m0 0-5.94-2.281m5.94 2.28-2.28 5.941" />
+  </svg>
+);
+
+const KPIS = [
+  { value: '2–4 Wo.', label: 'bis Go-Live',         icon: <IconCalendar />  },
+  { value: '24/7',    label: 'im Autopilot',         icon: <IconAutopilot /> },
+  { value: '15h+',    label: 'pro Woche gespart',    icon: <IconSaved />     },
+];
 
 /* ── Main Export ─────────────────────────────────────────────────────────── */
 
 export function HeroSection() {
   return (
-    <section
-      className="relative overflow-hidden pt-[120px] pb-24"
-      style={{
-        maskImage: 'linear-gradient(to bottom, black 75%, transparent)',
-        WebkitMaskImage: 'linear-gradient(to bottom, black 75%, transparent)',
-      }}
-    >
+    <section className="relative pt-[200px] md:pt-[260px] pb-24">
 
-      {/* ROI calculator pulse — global */}
-      <style>{`
-        @keyframes roi-glow {
-          0%, 100% { box-shadow: 0 0 0 1px rgba(251,146,60,0.08), 0 0 24px rgba(251,146,60,0.04); }
-          50%       { box-shadow: 0 0 0 1px rgba(251,146,60,0.20), 0 0 40px rgba(251,146,60,0.09); }
-        }
-        .roi-calculator-card { animation: roi-glow 5s ease-in-out infinite; }
-        @media (prefers-reduced-motion: reduce) { .roi-calculator-card { animation: none; } }
-      `}</style>
-
-      {/* ── Floating atmospheric gradients ── */}
-      <FloatingGradients />
-
-      {/* ── Dot grid — transparent centre creates depth behind planet ── */}
-      <div
-        className="absolute inset-0 opacity-[0.15] pointer-events-none"
-        style={{
-          backgroundImage: 'radial-gradient(circle, #3A4055 1px, transparent 1px)',
-          backgroundSize: '28px 28px',
-          maskImage:
-            'radial-gradient(ellipse 52% 44% at 50% 42%, transparent 32%, black 62%)',
-          WebkitMaskImage:
-            'radial-gradient(ellipse 52% 44% at 50% 42%, transparent 32%, black 62%)',
-        }}
-      />
-
-      {/* ── Top edge glow ── */}
+      {/* ── Subtle top-edge glow ── */}
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
-          background:
-            'radial-gradient(ellipse 95% 65% at 50% -5%, rgba(59,130,246,0.38) 0%, transparent 62%)',
+          background: 'radial-gradient(ellipse 90% 55% at 50% -5%, rgba(56,189,248,0.22) 0%, transparent 60%)',
         }}
       />
 
-      {/* ── Corona glow — planet light illuminating the text ── */}
+      {/* ── Centre glow behind text ── */}
       <div
-        className="absolute inset-0 pointer-events-none"
+        className="absolute left-1/2 -translate-x-1/2 pointer-events-none"
         style={{
-          background:
-            'radial-gradient(circle at 50% 55%, rgba(59,130,246,0.08) 0%, transparent 70%)',
+          top: '10%', width: 800, height: 320,
+          background: 'radial-gradient(circle, rgba(56,189,248,0.06) 0%, transparent 70%)',
+          filter: 'blur(60px)',
         }}
       />
 
-      {/* ── Content ── */}
-      <div className="relative max-w-3xl mx-auto px-6 md:px-8 text-center">
-
-        {/* Badge */}
-        <motion.div
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.45, delay: 0.05 }}
-          className="inline-flex rounded-md px-4 py-1.5 text-[11px] font-semibold tracking-[0.18em] uppercase mb-8"
-          style={{
-            background: 'rgba(10,13,20,0.72)',
-            border: '1.5px solid rgba(59,130,246,0.6)',
-            boxShadow: '0 0 22px rgba(59,130,246,0.16), inset 0 0 12px rgba(59,130,246,0.05)',
-            color: '#8BAED4',
-          }}
-        >
-          AI Automation Infrastruktur
-        </motion.div>
-
-        {/* Soft glow sitting directly behind headline */}
-        <div
-          className="absolute left-1/2 -translate-x-1/2 pointer-events-none"
-          style={{
-            top: '12%',
-            width: 700,
-            height: 260,
-            background: 'radial-gradient(circle, rgba(59,130,246,0.08) 0%, transparent 70%)',
-            filter: 'blur(52px)',
-          }}
-        />
-
-        {/* Headline */}
+      {/* ── Headline (wide container) ── */}
+      <div className="relative max-w-6xl mx-auto px-6 md:px-8 text-center mb-6">
         <motion.h1
-          className="text-[2.25rem] sm:text-[3rem] md:text-[4rem] lg:text-[4.25rem] font-bold leading-[1.08] tracking-tight mb-5 text-white"
+          className="font-extralight leading-[1.08] tracking-tight text-white w-full"
+          style={{ fontSize: 'clamp(1.5rem, 7.5vw, 6.5rem)' }}
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.65, ease: 'easeOut', delay: 0.18 }}
         >
-          Automatisiere, was
-          <br />
-          <span className="bg-gradient-to-r from-[#3B82F6] to-[#22D3EE] bg-clip-text text-transparent">
-            dich ausbremst
-          </span>
-          .
+          <span className="block md:whitespace-nowrap">Die KI-Automatisierung</span>
+          <span className="block md:whitespace-nowrap bg-gradient-to-r from-[#A0F0FF] via-[#7DD3FC] to-[#A0F0FF] bg-clip-text text-transparent">für dein Unternehmen</span>
         </motion.h1>
+      </div>
+
+      {/* ── Rest ── */}
+      <div className="relative max-w-4xl mx-auto px-6 md:px-8 text-center">
 
         {/* Subheadline */}
         <motion.p
-          className="text-base md:text-lg text-[#9CA3AF] leading-relaxed mb-12 max-w-2xl mx-auto"
+          className="text-sm md:text-xl text-white/60 leading-relaxed mb-8 md:mb-10 max-w-2xl mx-auto"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.6, delay: 0.36 }}
         >
-          Manuelle Prozesse kosten dich jeden Tag Zeit, Nerven und
-          Geschwindigkeit – während andere Unternehmen längst automatisiert
-          arbeiten.
+          Maßgeschneiderte KI-Automatisierung für dein Team, deine Systeme und Prozesse.
         </motion.p>
 
-        {/* KPIs — hover over the planet */}
+        {/* CTA Buttons */}
         <motion.div
-          className="flex items-center justify-center divide-x divide-[#2A2F3A]"
+          className="flex flex-row items-center justify-center gap-3 mb-10 md:mb-14"
+          initial={{ opacity: 0, y: 14 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.55, ease: 'easeOut', delay: 0.48 }}
+        >
+          {/* Primary */}
+          <HoverBorderGradient
+            as="button"
+            className="flex items-center gap-1.5 font-medium px-4 py-2.5 text-xs sm:px-6 sm:py-3 sm:text-sm"
+            data-cal-link="erik-neinstel-mshw1t/30min"
+            data-cal-namespace="30min"
+            data-cal-config='{"layout":"month_view","useSlotsViewOnSmallScreen":"true"}'
+          >
+            Erstgespräch buchen
+            <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+            </svg>
+          </HoverBorderGradient>
+
+          {/* Secondary */}
+          <HoverBorderGradient
+            as="a"
+            href="#leistungen"
+            className="flex items-center gap-2 text-white/80 font-medium px-4 py-2.5 text-xs sm:px-6 sm:py-3 sm:text-sm"
+          >
+            Leistungen entdecken
+          </HoverBorderGradient>
+        </motion.div>
+
+        {/* KPIs — always horizontal row */}
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.55, ease: 'easeOut', delay: 0.52 }}
+          transition={{ duration: 0.55, ease: 'easeOut', delay: 0.62 }}
         >
-          {[
-            { value: '< 5 Min', label: 'Reaktionszeit' },
-            { value: '100%',    label: 'Automatisiert' },
-            { value: '2–4 Wo.', label: 'Time to Live'  },
-          ].map(({ value, label }) => (
-            <div key={label} className="px-6 sm:px-10 text-center">
-              <div className="text-xl font-bold text-white">{value}</div>
-              <div className="text-xs text-[#9CA3AF] mt-0.5">{label}</div>
-            </div>
-          ))}
+          <div className="flex items-center justify-center divide-x divide-white/10">
+            {KPIS.map(({ value, label }) => (
+              <div key={label} className="px-4 sm:px-8 text-center">
+                <div className="text-sm sm:text-xl font-bold text-white">{value}</div>
+                <div className="text-[10px] sm:text-xs text-white/50 mt-0.5">{label}</div>
+              </div>
+            ))}
+          </div>
         </motion.div>
 
       </div>
