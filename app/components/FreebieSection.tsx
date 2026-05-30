@@ -5,6 +5,7 @@ import { useRef } from 'react';
 import React from 'react';
 import Image from 'next/image';
 import { NumberTicker } from './ui/number-ticker';
+import type { LucideIcon } from 'lucide-react';
 import { Brain, MessageSquare, Zap, Gift } from 'lucide-react';
 
 const BRAND = '#8B4A1E';
@@ -189,7 +190,7 @@ export function FreebieSection() {
                   { icon: MessageSquare, label: 'Claude Chat, Cowork und Code' },
                   { icon: Zap,           label: 'Skills, Konnektoren, MCPs und mehr' },
                   { icon: Gift,          label: '10+ Bonus Seiten' },
-                ] as { icon: React.ElementType; label: string }[]).map(({ icon: Icon, label }) => (
+                ] as { icon: LucideIcon; label: string }[]).map(({ icon: Icon, label }) => (
                   <div key={label} className="flex items-center gap-2">
                     <div className="w-4 h-4 rounded flex items-center justify-center flex-shrink-0"
                          style={{ background: 'rgba(255,255,255,0.12)' }}>
