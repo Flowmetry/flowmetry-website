@@ -676,7 +676,6 @@ export function ProzessSection() {
                       className="hidden md:flex w-[470px] flex-shrink-0 rounded-2xl overflow-hidden relative"
                       style={{
                         background: '#ffffff',
-                        background: '#ffffff',
                         boxShadow: '0 10px 36px rgba(139,74,30,0.10), 0 3px 10px rgba(139,74,30,0.06)',
                         opacity: stepOpacities[i],
                         marginTop: placeholderStyles[i].marginTop,
