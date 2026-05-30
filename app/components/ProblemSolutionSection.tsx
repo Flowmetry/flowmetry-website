@@ -1,272 +1,584 @@
 'use client';
 
-import { motion } from 'framer-motion';
-import { HoverBorderGradient } from './HoverBorderGradient';
+import { motion, useInView, AnimatePresence } from 'framer-motion';
+import { useRef, useEffect, useState } from 'react';
 
-/* ── Sparkline: volatile downward trend (left card) ───────────────────────── */
-const DOWN_LINE = 'M 0,18 L 30,32 L 50,10 L 75,45 L 95,25 L 118,55 L 138,38 L 162,62 L 180,48 L 205,72 L 228,58 L 252,82 L 272,68 L 292,88 L 300,96';
-const DOWN_FILL = `${DOWN_LINE} L 300,100 L 0,100 Z`;
+const BRAND = '#8B4A1E';
+const BRAND_LIGHT = 'rgba(139,74,30,0.08)';
+const BRAND_MID = 'rgba(139,74,30,0.15)';
 
-function SparklineDown() {
+/* ── Card 1: Copy-Paste ── */
+const TABLE_ROWS = [
+  { name: 'Max Müller', betrag: '2.400 €' },
+  { name: 'Anna Schmidt', betrag: '890 €' },
+  { name: 'Peter Braun', betrag: '1.750 €' },
+];
+
+type CopyPhase = 'to-name' | 'copy-menu' | 'to-kopieren' | 'copied' | 'to-field' | 'paste-menu' | 'to-einfuegen' | 'pasted';
+
+function SmallCursor() {
   return (
-    <svg viewBox="0 0 300 100" preserveAspectRatio="none" className="w-full h-full" aria-hidden="true">
-      <defs>
-        <linearGradient id="problemFill" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%"   stopColor="rgb(239,68,68)"  stopOpacity="0.28" />
-          <stop offset="100%" stopColor="rgb(239,68,68)"  stopOpacity="0" />
-        </linearGradient>
-      </defs>
-      {/* Fill */}
-      <motion.path
-        d={DOWN_FILL}
-        fill="url(#problemFill)"
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.8, delay: 0.4 }}
-      />
-      {/* Line */}
-      <motion.path
-        d={DOWN_LINE}
-        fill="none"
-        stroke="rgb(239,68,68)"
-        strokeWidth="1.8"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        initial={{ pathLength: 0, opacity: 0 }}
-        whileInView={{ pathLength: 1, opacity: 1 }}
-        viewport={{ once: true }}
-        transition={{ duration: 1.6, ease: 'easeInOut' }}
-      />
-      {/* End dot */}
-      <motion.circle
-        cx="300" cy="96" r="3"
-        fill="rgb(239,68,68)"
-        initial={{ opacity: 0, scale: 0 }}
-        whileInView={{ opacity: 1, scale: 1 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.3, delay: 1.5 }}
-      />
+    <svg width="13" height="17" viewBox="0 0 13 17" fill="none">
+      <path d="M1 1L1 14.5L4.2 10.5L6.5 16L8.3 15.3L6 9.8L11.5 9.8L1 1Z"
+        fill="white" stroke="#1C1614" strokeWidth="0.9" strokeLinejoin="round" strokeLinecap="round" />
     </svg>
   );
 }
 
-/* ── Sparkline: smooth exponential upward curve (right card) ──────────────── */
-const UP_LINE = 'M 0,94 C 60,92 120,80 165,58 C 210,36 258,12 300,4';
-const UP_FILL = `${UP_LINE} L 300,100 L 0,100 Z`;
+function ManualWorkAnim() {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const rowRef0 = useRef<HTMLDivElement>(null);
+  const rowRef1 = useRef<HTMLDivElement>(null);
+  const rowRef2 = useRef<HTMLDivElement>(null);
+  const rowRefs = [rowRef0, rowRef1, rowRef2];
+  const kopierenRef = useRef<HTMLDivElement>(null);
+  const einfuegenRef = useRef<HTMLDivElement>(null);
+  const fieldRef = useRef<HTMLDivElement>(null);
 
-function SparklineUp() {
+  const inView = useInView(containerRef, { once: false });
+  const [row, setRow] = useState(0);
+  const [phase, setPhase] = useState<CopyPhase>('to-name');
+  const [curPos, setCurPos] = useState({ x: 40, y: 60 });
+  const [menuAnchor, setMenuAnchor] = useState({ x: 0, y: 0 });
+  const [pastedName, setPastedName] = useState('');
+  const [pastedBetrag, setPastedBetrag] = useState('');
+
+  // Measure position of an element relative to the container
+  const measure = (el: HTMLElement | null, ox = 8, oy = 8) => {
+    if (!el || !containerRef.current) return { x: 40, y: 60 };
+    const cr = containerRef.current.getBoundingClientRect();
+    const er = el.getBoundingClientRect();
+    return { x: er.left - cr.left + ox, y: er.top - cr.top + oy };
+  };
+
+  useEffect(() => {
+    if (!inView) return;
+    let cancelled = false;
+    let r = 0;
+
+    const go = async () => {
+      while (!cancelled) {
+        setRow(r);
+        setPhase('to-name');
+        await delay(80);
+        const namePos = measure(rowRefs[r].current, 18, 10);
+        setCurPos(namePos);
+        await delay(750);
+        if (cancelled) break;
+
+        // Right-click on name → copy menu anchored at cursor tip
+        setMenuAnchor({ x: namePos.x + 6, y: namePos.y + 6 });
+        setPhase('copy-menu');
+        await delay(420);
+        if (cancelled) break;
+
+        // Cursor moves to "Kopieren" item (measured from DOM)
+        setPhase('to-kopieren');
+        await delay(60);
+        const kopPos = measure(kopierenRef.current, 14, 9);
+        setCurPos(kopPos);
+        await delay(520);
+        if (cancelled) break;
+
+        setPhase('copied');
+        await delay(220);
+        if (cancelled) break;
+
+        // Move to right field
+        setPhase('to-field');
+        await delay(60);
+        const fp = measure(fieldRef.current, 22, 10);
+        setCurPos(fp);
+        await delay(750);
+        if (cancelled) break;
+
+        // Right-click on field → paste menu
+        setMenuAnchor({ x: fp.x + 6, y: fp.y + 6 });
+        setPhase('paste-menu');
+        await delay(420);
+        if (cancelled) break;
+
+        // Cursor moves to "Einfügen" item
+        setPhase('to-einfuegen');
+        await delay(60);
+        const einfPos = measure(einfuegenRef.current, 14, 9);
+        setCurPos(einfPos);
+        await delay(520);
+        if (cancelled) break;
+
+        setPhase('pasted');
+        setPastedName(TABLE_ROWS[r].name);
+        setPastedBetrag(TABLE_ROWS[r].betrag);
+        await delay(1300);
+        if (cancelled) break;
+
+        setPastedName('');
+        setPastedBetrag('');
+        r = (r + 1) % 3;
+        await delay(120);
+      }
+    };
+
+    go();
+    return () => { cancelled = true; };
+  }, [inView]);
+
+  const showCopyMenu = phase === 'copy-menu' || phase === 'to-kopieren';
+  const showPasteMenu = phase === 'paste-menu' || phase === 'to-einfuegen';
+  const highlightRow = ['to-name', 'copy-menu', 'to-kopieren', 'copied'].includes(phase);
+
   return (
-    <svg viewBox="0 0 300 100" preserveAspectRatio="none" className="w-full h-full" aria-hidden="true">
-      <defs>
-        <linearGradient id="solutionFill" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%"   stopColor="rgb(34,211,238)"  stopOpacity="0.25" />
-          <stop offset="100%" stopColor="rgb(34,211,238)"  stopOpacity="0" />
-        </linearGradient>
-      </defs>
-      {/* Fill */}
-      <motion.path
-        d={UP_FILL}
-        fill="url(#solutionFill)"
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.8, delay: 0.5 }}
-      />
-      {/* Line */}
-      <motion.path
-        d={UP_LINE}
-        fill="none"
-        stroke="rgb(34,211,238)"
-        strokeWidth="1.8"
-        strokeLinecap="round"
-        initial={{ pathLength: 0, opacity: 0 }}
-        whileInView={{ pathLength: 1, opacity: 1 }}
-        viewport={{ once: true }}
-        transition={{ duration: 1.6, ease: 'easeInOut', delay: 0.1 }}
-      />
-      {/* End dot */}
-      <motion.circle
-        cx="300" cy="4" r="3"
-        fill="rgb(34,211,238)"
-        initial={{ opacity: 0, scale: 0 }}
-        whileInView={{ opacity: 1, scale: 1 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.3, delay: 1.6 }}
-      />
-    </svg>
+    <div ref={containerRef} className="relative flex items-center justify-center h-full gap-3 px-4 pb-6 pt-8">
+
+      {/* LEFT: Spreadsheet */}
+      <div className="flex-1 rounded-xl overflow-hidden" style={{ boxShadow: '0 4px 16px rgba(0,0,0,0.07)', border: '1px solid rgba(0,0,0,0.07)' }}>
+        <div className="grid grid-cols-2 px-2.5 py-2" style={{ background: '#f6f6f6', borderBottom: '1px solid rgba(0,0,0,0.06)' }}>
+          {['Name', 'Betrag'].map(h => (
+            <span key={h} className="text-[8px] font-semibold text-[#1C1614]/40 uppercase tracking-wide">{h}</span>
+          ))}
+        </div>
+        {TABLE_ROWS.map((tableRow, i) => (
+          <motion.div
+            key={tableRow.name}
+            ref={rowRefs[i]}
+            className="grid grid-cols-2 px-2.5 py-2"
+            animate={{ background: row === i && highlightRow ? 'rgba(139,74,30,0.08)' : 'white' }}
+            transition={{ duration: 0.15 }}
+            style={{ borderBottom: i < 2 ? '1px solid rgba(0,0,0,0.04)' : 'none' }}
+          >
+            <span className="text-[9px] font-medium text-[#1C1614]/80 truncate">{tableRow.name}</span>
+            <span className="text-[9px] text-[#1C1614]/50">{tableRow.betrag}</span>
+          </motion.div>
+        ))}
+      </div>
+
+      {/* RIGHT: Angebot */}
+      <div className="flex-1 rounded-xl overflow-hidden" style={{ boxShadow: '0 4px 16px rgba(0,0,0,0.07)', border: '1px solid rgba(0,0,0,0.07)', background: 'white' }}>
+        <div className="px-2.5 py-2" style={{ background: '#f6f6f6', borderBottom: '1px solid rgba(0,0,0,0.06)' }}>
+          <span className="text-[8px] font-semibold text-[#1C1614]/40 uppercase tracking-wide">Angebot</span>
+        </div>
+        <div className="px-3 py-2.5 flex flex-col gap-2">
+          <div className="text-[8px] text-[#1C1614]/40 font-medium">Empfänger</div>
+          <div ref={fieldRef} className="rounded-md px-2 py-1.5 min-h-[22px]" style={{ border: '1px solid rgba(0,0,0,0.10)', background: '#fafafa' }}>
+            <AnimatePresence mode="wait">
+              {pastedName && (
+                <motion.span key={pastedName} className="text-[9px] font-medium text-[#1C1614]"
+                  initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.2 }}>
+                  {pastedName}
+                </motion.span>
+              )}
+            </AnimatePresence>
+          </div>
+          <div className="text-[8px] text-[#1C1614]/40 font-medium">Betrag</div>
+          <div className="rounded-md px-2 py-1.5 min-h-[22px]" style={{ border: '1px solid rgba(0,0,0,0.10)', background: '#fafafa' }}>
+            <AnimatePresence mode="wait">
+              {pastedBetrag && (
+                <motion.span key={pastedBetrag} className="text-[9px] font-medium text-[#1C1614]"
+                  initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.2 }}>
+                  {pastedBetrag}
+                </motion.span>
+              )}
+            </AnimatePresence>
+          </div>
+        </div>
+      </div>
+
+      {/* Cursor – follows measured positions */}
+      <motion.div
+        className="absolute pointer-events-none"
+        style={{ top: 0, left: 0, zIndex: 50 }}
+        animate={{ x: curPos.x, y: curPos.y }}
+        transition={{ duration: 0.45, ease: 'easeInOut' }}
+      >
+        <SmallCursor />
+      </motion.div>
+
+      {/* Copy context menu – anchored at cursor right-click position */}
+      <AnimatePresence>
+        {showCopyMenu && (
+          <motion.div
+            className="absolute pointer-events-none rounded-lg overflow-hidden"
+            style={{ left: menuAnchor.x, top: menuAnchor.y, zIndex: 40, background: 'white', boxShadow: '0 8px 24px rgba(0,0,0,0.13), 0 2px 6px rgba(0,0,0,0.07)', border: '1px solid rgba(0,0,0,0.09)', minWidth: 118 }}
+            initial={{ opacity: 0, scale: 0.92, y: -4 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.9 }}
+            transition={{ duration: 0.11 }}
+          >
+            {['Ausschneiden', 'Kopieren', 'Link kopieren'].map((item, i) => (
+              <div
+                key={item}
+                ref={item === 'Kopieren' ? kopierenRef : undefined}
+                className="px-3 py-1.5 text-[9px] font-medium"
+                style={{
+                  background: item === 'Kopieren' && phase === 'to-kopieren' ? 'rgba(139,74,30,0.09)' : 'transparent',
+                  color: item === 'Kopieren' && phase === 'to-kopieren' ? BRAND : '#1C1614',
+                  borderBottom: i < 2 ? '1px solid rgba(0,0,0,0.05)' : 'none',
+                }}
+              >
+                {item}
+              </div>
+            ))}
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Paste context menu */}
+      <AnimatePresence>
+        {showPasteMenu && (
+          <motion.div
+            className="absolute pointer-events-none rounded-lg overflow-hidden"
+            style={{ left: menuAnchor.x, top: menuAnchor.y, zIndex: 40, background: 'white', boxShadow: '0 8px 24px rgba(0,0,0,0.13), 0 2px 6px rgba(0,0,0,0.07)', border: '1px solid rgba(0,0,0,0.09)', minWidth: 110 }}
+            initial={{ opacity: 0, scale: 0.92, y: -4 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.9 }}
+            transition={{ duration: 0.11 }}
+          >
+            {['Einfügen', 'Alles auswählen'].map((item, i) => (
+              <div
+                key={item}
+                ref={item === 'Einfügen' ? einfuegenRef : undefined}
+                className="px-3 py-1.5 text-[9px] font-medium"
+                style={{
+                  background: item === 'Einfügen' && phase === 'to-einfuegen' ? 'rgba(139,74,30,0.09)' : 'transparent',
+                  color: item === 'Einfügen' && phase === 'to-einfuegen' ? BRAND : '#1C1614',
+                  borderBottom: i < 1 ? '1px solid rgba(0,0,0,0.05)' : 'none',
+                }}
+              >
+                {item}
+              </div>
+            ))}
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+    </div>
   );
 }
 
-/* ── Main Export ─────────────────────────────────────────────────────────────── */
+function delay(ms: number) { return new Promise(r => setTimeout(r, ms)); }
 
+/* ── Card 2: Tools ohne System ── */
+const AI_TOOLS = [
+  { name: 'Claude', src: '/logos/Claude.png', cx: '50%', cy: '20%', cardBg: '#ffffff' },
+  { name: 'ChatGPT', src: '/logos/ChatGPT.png', cx: '24%', cy: '70%', cardBg: '#ffffff' },
+  { name: 'Gemini', src: '/logos/Gemini.png', cx: '76%', cy: '70%', cardBg: '#ffffff' },
+];
+
+
+/* Cursor: ChatGPT → Gemini → Claude → loop */
+// positions match AI_TOOLS cx/cy
+const CURSOR_KEYFRAMES = {
+  left: ['24%', '24%', '76%', '76%', '50%', '50%', '24%'],
+  top:  ['70%', '70%', '70%', '70%', '20%', '20%', '70%'],
+};
+const CURSOR_TIMES = [0, 0.1, 0.38, 0.48, 0.75, 0.88, 1];
+
+function ToolCursor({ inView }: { inView: boolean }) {
+  return (
+    <motion.div
+      className="absolute pointer-events-none flex items-start gap-1.5"
+      style={{ zIndex: 20, left: '24%', top: '70%' }}
+      animate={inView ? CURSOR_KEYFRAMES : {}}
+      transition={{
+        duration: 5.5,
+        times: CURSOR_TIMES,
+        repeat: Infinity,
+        ease: 'easeInOut',
+      }}
+    >
+      {/* Clean modern cursor */}
+      <svg width="14" height="18" viewBox="0 0 14 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path
+          d="M1.5 1L1.5 15.5L4.8 11.2L7 17L9 16.2L6.8 10.5L12 10.5L1.5 1Z"
+          fill="white"
+          stroke="#1C1614"
+          strokeWidth="1"
+          strokeLinejoin="round"
+          strokeLinecap="round"
+        />
+      </svg>
+      {/* hmm capsule */}
+      <div
+        className="text-[10px] font-medium px-2.5 py-1 rounded-full"
+        style={{
+          background: 'white',
+          border: '1px solid rgba(28,22,20,0.10)',
+          color: '#1C1614',
+          boxShadow: '0 2px 10px rgba(0,0,0,0.09)',
+          whiteSpace: 'nowrap',
+          marginTop: '1px',
+        }}
+      >
+        hmm...
+      </div>
+    </motion.div>
+  );
+}
+
+function ToolsWithoutSystemAnim() {
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: false });
+
+  return (
+    <div ref={ref} className="relative h-full w-full overflow-hidden">
+      {AI_TOOLS.map(({ name, src, cx, cy, cardBg }, i) => (
+        <motion.div
+          key={name}
+          className="absolute"
+          style={{ left: cx, top: cy, transform: 'translate(-50%, -50%)' }}
+        >
+          <motion.div
+            className="flex flex-col items-center gap-2"
+            initial={{ opacity: 0, scale: 0.7 }}
+            animate={inView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.7 }}
+            transition={{ duration: 0.5, delay: i * 0.15 }}
+          >
+            {/* Gradient border wrapper */}
+            <div
+              className="rounded-[18px] p-[1.5px]"
+              style={{
+                background: 'linear-gradient(135deg, rgba(139,74,30,0.35) 0%, rgba(180,160,140,0.15) 50%, rgba(139,74,30,0.2) 100%)',
+                boxShadow: '0 8px 32px rgba(0,0,0,0.10), 0 2px 8px rgba(139,74,30,0.08)',
+              }}
+            >
+              <div
+                className="w-24 h-24 rounded-2xl flex items-center justify-center"
+                style={{ background: 'linear-gradient(145deg, #ffffff 0%, #faf7f5 100%)' }}
+              >
+                <img
+                  src={src}
+                  alt={name}
+                  className="object-contain"
+                  style={{
+                    width: name === 'ChatGPT' ? '4rem' : '3.5rem',
+                    height: name === 'ChatGPT' ? '4rem' : '3.5rem',
+                    filter: name === 'ChatGPT' ? 'brightness(0)' : 'none',
+                  }}
+                />
+              </div>
+            </div>
+          </motion.div>
+        </motion.div>
+      ))}
+
+      <ToolCursor inView={inView} />
+    </div>
+  );
+}
+
+/* ── Card 3: Broken step-by-step ── */
+const BROKEN_STEPS = [
+  { num: 1, source: 'YouTube', text: 'Starte einfach mit ChatGPT' },
+  { num: 2, source: 'KI-Guru', text: 'Vergiss ChatGPT – Prompts sind falsch' },
+  { num: 3, source: 'Newsletter', text: 'Claude ist eigentlich viel besser' },
+  { num: 4, source: 'Reddit', text: 'KI ist sowieso überschätzt' },
+  { num: 5, source: 'LinkedIn', text: 'Mit System wird alles einfach' },
+];
+
+function BrokenStepsAnim() {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const stepRef0 = useRef<HTMLDivElement>(null);
+  const stepRef1 = useRef<HTMLDivElement>(null);
+  const stepRef2 = useRef<HTMLDivElement>(null);
+  const stepRef3 = useRef<HTMLDivElement>(null);
+  const stepRef4 = useRef<HTMLDivElement>(null);
+  const stepRefs = [stepRef0, stepRef1, stepRef2, stepRef3, stepRef4];
+
+  const inView = useInView(containerRef, { once: false });
+  const [activeStep, setActiveStep] = useState(-1);
+  const [curPos, setCurPos] = useState({ x: 20, y: 60 });
+
+  const measure = (el: HTMLElement | null, ox = 6, oy = 10) => {
+    if (!el || !containerRef.current) return { x: 20, y: 60 };
+    const cr = containerRef.current.getBoundingClientRect();
+    const er = el.getBoundingClientRect();
+    return { x: er.left - cr.left + ox, y: er.top - cr.top + oy };
+  };
+
+  useEffect(() => {
+    if (!inView) return;
+    let cancelled = false;
+
+    const go = async () => {
+      await delay(300);
+      while (!cancelled) {
+        for (let i = 0; i < BROKEN_STEPS.length; i++) {
+          if (cancelled) break;
+          const pos = measure(stepRefs[i].current, 6, 10);
+          setCurPos(pos);
+          await delay(220);
+          setActiveStep(i);
+          await delay(1100);
+        }
+        if (cancelled) break;
+        setActiveStep(-1);
+        await delay(700);
+      }
+    };
+
+    go();
+    return () => { cancelled = true; };
+  }, [inView]);
+
+  return (
+    <div ref={containerRef} className="relative flex flex-col items-center justify-center h-full px-4 py-5">
+      <div
+        className="w-full rounded-xl overflow-hidden"
+        style={{ boxShadow: '0 4px 16px rgba(0,0,0,0.07)', border: '1px solid rgba(0,0,0,0.07)', background: 'white' }}
+      >
+        {/* Header */}
+        <div className="px-3 py-2" style={{ background: '#f6f6f6', borderBottom: '1px solid rgba(0,0,0,0.06)' }}>
+          <span className="text-[8px] font-semibold text-[#1C1614]/40 uppercase tracking-wide">Dein KI-Lernpfad</span>
+        </div>
+
+        {/* Steps */}
+        {BROKEN_STEPS.map((step, i) => (
+          <motion.div
+            key={i}
+            ref={stepRefs[i]}
+            className="flex items-center gap-2.5 px-3 py-2.5"
+            animate={{ background: activeStep === i ? 'rgba(139,74,30,0.06)' : 'white' }}
+            transition={{ duration: 0.15 }}
+            style={{ borderBottom: i < BROKEN_STEPS.length - 1 ? '1px solid rgba(0,0,0,0.04)' : 'none' }}
+          >
+            <div
+              className="flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center text-[8px] font-bold"
+              style={{
+                background: activeStep === i ? BRAND : 'rgba(28,22,20,0.07)',
+                color: activeStep === i ? 'white' : 'rgba(28,22,20,0.35)',
+                transition: 'background 0.15s, color 0.15s',
+              }}
+            >
+              {step.num}
+            </div>
+            <div
+              className="flex-shrink-0 px-1.5 py-0.5 rounded text-[7.5px] font-semibold"
+              style={{ background: 'rgba(28,22,20,0.05)', color: 'rgba(28,22,20,0.4)' }}
+            >
+              {step.source}
+            </div>
+            <span
+              className="text-[9px] font-medium leading-tight"
+              style={{ color: activeStep === i ? '#1C1614' : 'rgba(28,22,20,0.55)' }}
+            >
+              {step.text}
+            </span>
+          </motion.div>
+        ))}
+
+        {/* "..." row */}
+        <div className="flex items-center gap-2.5 px-3 py-2" style={{ borderTop: '1px solid rgba(0,0,0,0.04)' }}>
+          <div
+            className="flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center"
+            style={{ background: 'rgba(28,22,20,0.04)' }}
+          >
+            <span className="text-[8px]" style={{ color: 'rgba(28,22,20,0.2)', letterSpacing: '0.5px' }}>···</span>
+          </div>
+          <span className="text-[9px]" style={{ color: 'rgba(28,22,20,0.2)' }}>und weiter...</span>
+        </div>
+      </div>
+
+      {/* Cursor */}
+      <motion.div
+        className="absolute pointer-events-none"
+        style={{ top: 0, left: 0, zIndex: 30 }}
+        animate={{ x: curPos.x, y: curPos.y }}
+        transition={{ duration: 0.4, ease: 'easeInOut' }}
+      >
+        <SmallCursor />
+      </motion.div>
+    </div>
+  );
+}
+
+/* ── Cards Data ── */
+const CARDS = [
+  {
+    title: 'Manuelle Arbeit frisst deinen Tag',
+    text: 'E-Mails, Angebote, Content, Daten – alles von Hand. Nicht weil du willst, sondern weil du keinen besseren Weg kennst.',
+    Anim: ManualWorkAnim,
+  },
+  {
+    title: 'Tools ohne System',
+    text: 'Du nutzt ChatGPT oder Claude. Frage rein, Antwort raus. Aber morgen fängst du wieder bei null an. Kein Workflow, kein System.',
+    Anim: ToolsWithoutSystemAnim,
+  },
+  {
+    title: 'Keiner zeigt dir den Weg',
+    text: 'YouTube verwirrt. KI-Gurus versprechen die Welt. Aber niemand setzt sich hin und zeigt dir Schritt für Schritt wie es wirklich funktioniert.',
+    Anim: BrokenStepsAnim,
+  },
+];
+
+/* ── Main Export ── */
 export function ProblemSolutionSection() {
   return (
-    <section className="py-24 relative">
-      <div className="max-w-6xl mx-auto px-6">
+    <section className="py-12 md:py-24 relative">
+      <div className="max-w-7xl mx-auto px-6">
 
         {/* Headline */}
-        <div className="text-center mb-14">
-          <h2 className="text-3xl md:text-4xl font-extralight text-white leading-tight">
-            Wo steht{' '}
-            <span className="bg-gradient-to-r from-[#A0F0FF] to-[#60D8FF] bg-clip-text text-transparent">
-              dein Unternehmen
+        <div className="text-center mb-6 md:mb-14">
+          <h2
+            className="font-semibold tracking-tighter text-[#1C1614] leading-[1.05]"
+            style={{ fontSize: 'clamp(1.8rem, 2.8vw, 3rem)' }}
+          >
+            <span className="block">
+              <span style={{ fontFamily: 'var(--font-signature)', fontStyle: 'italic', fontWeight: 700, color: '#8B4A1E', fontSize: '1.1em' }}>
+                Warum du härter
+              </span>
+              {' '}arbeitest
             </span>
-            ?
+            <span className="block">als du müsstest.</span>
           </h2>
+          <p className="text-[15px] md:text-base font-normal text-[#1C1614]/60 leading-relaxed mt-3 max-w-xl mx-auto">
+            <span className="block">Während du noch manuell arbeitest, setzen andere</span>
+            <span className="block">längst KI ein und ziehen an dir vorbei.</span>
+          </p>
         </div>
 
-        {/* 2-Card Layout */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-
-          {/* Problem Card */}
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-60px' }}
-            transition={{ duration: 0.55, ease: 'easeOut' }}
-            className="rounded-2xl p-8 flex flex-col gap-6"
-            style={{
-              background: 'rgba(239,68,68,0.04)',
-              border: '0.5px solid rgba(239,68,68,0.18)',
-              boxShadow: '0 0 60px rgba(239,68,68,0.06)',
-            }}
-          >
-            <div className="flex items-start justify-between">
-              <div>
-                <span className="inline-block text-[10px] font-bold tracking-[0.2em] uppercase text-red-500/60 mb-2">
-                  Jetzt
-                </span>
-                <h3 className="text-xl font-bold text-white">
-                  Manuell & überlastet
-                </h3>
-              </div>
-              {/* Danger icon */}
-              <div
-                className="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0"
-                style={{ background: 'rgba(239,68,68,0.1)', border: '0.5px solid rgba(239,68,68,0.25)' }}
-              >
-                <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8} className="text-red-400">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
-                </svg>
-              </div>
-            </div>
-
-            {/* Sparkline */}
-            <div
-              className="rounded-xl px-4 pt-4 pb-2"
+        {/* 3 Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {CARDS.map(({ title, text, Anim }, i) => (
+            <motion.div
+              key={title}
+              className="rounded-2xl overflow-hidden bg-white flex flex-col"
               style={{
-                background: 'rgba(239,68,68,0.04)',
-                border: '0.5px solid rgba(239,68,68,0.14)',
-                height: 130,
+                border: '1px solid rgba(28,22,20,0.08)',
+                boxShadow: '0 4px 24px rgba(0,0,0,0.06)',
+                height: '500px',
               }}
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-40px' }}
+              transition={{ duration: 0.5, delay: i * 0.1 }}
             >
-              <SparklineDown />
-            </div>
-
-            <p className="text-sm text-white/55 leading-relaxed">
-              Zeit verpufft in isolierten Tools und manuellem Chaos. Das Team ist ausgelastet, aber das Unternehmen skaliert nicht.
-            </p>
-
-            <ul className="flex flex-col gap-3">
-              {[
-                'Fachkräfte machen Copy-Paste',
-                'Hohe Fehlerquote bei Daten',
-                'Verlorene Leads durch Wartezeit',
-              ].map((item) => (
-                <li key={item} className="flex items-center gap-3 text-sm text-white/60">
-                  <span
-                    className="w-1.5 h-1.5 rounded-full flex-shrink-0"
-                    style={{ background: 'rgba(239,68,68,0.6)' }}
-                  />
-                  {item}
-                </li>
-              ))}
-            </ul>
-          </motion.div>
-
-          {/* Solution Card */}
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-60px' }}
-            transition={{ duration: 0.55, ease: 'easeOut', delay: 0.1 }}
-            className="rounded-2xl p-8 flex flex-col gap-6"
-            style={{
-              background: 'rgba(59,130,246,0.05)',
-              border: '0.5px solid rgba(59,130,246,0.22)',
-              boxShadow: '0 0 60px rgba(59,130,246,0.08)',
-            }}
-          >
-            <div className="flex items-start justify-between">
-              <div>
-                <span className="inline-block text-[10px] font-bold tracking-[0.2em] uppercase text-blue-400/60 mb-2">
-                  Mit Flowmetry
-                </span>
-                <h3 className="text-xl font-bold text-white">
-                  Automatisiert & skalierbar
-                </h3>
-              </div>
-              {/* Check icon */}
+              {/* Visualization – 2/3 of card */}
               <div
-                className="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0"
-                style={{ background: 'rgba(59,130,246,0.12)', border: '0.5px solid rgba(59,130,246,0.28)' }}
+                className="relative"
+                style={{ height: '66%', background: 'rgba(249,246,243,0.6)', flexShrink: 0 }}
               >
-                <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8} className="text-blue-400">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z" />
-                </svg>
+                <div className="h-full w-full">
+                  <Anim />
+                </div>
+                {/* Gradient fade into text */}
+                <div
+                  className="absolute bottom-0 left-0 right-0 h-20 pointer-events-none"
+                  style={{ background: 'linear-gradient(to bottom, transparent, white)' }}
+                />
               </div>
-            </div>
 
-            {/* Sparkline */}
-            <div
-              className="rounded-xl px-4 pt-4 pb-2"
-              style={{
-                background: 'rgba(34,211,238,0.04)',
-                border: '0.5px solid rgba(34,211,238,0.14)',
-                height: 130,
-              }}
-            >
-              <SparklineUp />
-            </div>
-
-            <p className="text-sm text-white/55 leading-relaxed">
-              Wir vernetzen deine Software zu einer fehlerfreien Infrastruktur. Deine Prozesse laufen ab sofort lautlos auf Autopilot.
-            </p>
-
-            <ul className="flex flex-col gap-3">
-              {[
-                'Nahtloser Datenfluss in Echtzeit',
-                'Wenige bis keine manuellen Routineaufgaben',
-                'Skalierung ohne extra Personalkosten',
-              ].map((item) => (
-                <li key={item} className="flex items-center gap-3 text-sm text-white/60">
-                  <span
-                    className="w-1.5 h-1.5 rounded-full flex-shrink-0"
-                    style={{ background: 'rgba(34,211,238,0.7)' }}
-                  />
-                  {item}
-                </li>
-              ))}
-            </ul>
-          </motion.div>
-
-        </div>
-
-        {/* CTA */}
-        <div className="mt-10 flex justify-center">
-          <HoverBorderGradient
-            as="button"
-            className="flex items-center gap-2 font-medium"
-            data-cal-link="erik-neinstel-mshw1t/30min"
-            data-cal-namespace="30min"
-            data-cal-config='{"layout":"month_view","useSlotsViewOnSmallScreen":"true"}'
-          >
-            Jetzt Situation analysieren
-            <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
-            </svg>
-          </HoverBorderGradient>
+              {/* Text – 1/3 of card */}
+              <div className="px-7 pb-8 pt-1 flex flex-col gap-3 flex-1">
+                <h3
+                  className="font-medium tracking-tighter text-[#1C1614] leading-[1.1]"
+                  style={{ fontSize: 'clamp(1.45rem, 1.9vw, 1.85rem)' }}
+                >
+                  {title}
+                </h3>
+                <p className="text-sm font-normal text-[#1C1614]/60 leading-relaxed">{text}</p>
+              </div>
+            </motion.div>
+          ))}
         </div>
 
       </div>

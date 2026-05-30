@@ -7,24 +7,25 @@ export const metadata: Metadata = {
 
 export default function AGBPage() {
   return (
-    <div className="min-h-screen bg-[#0F1115] text-white flex flex-col">
+    <div className="min-h-screen bg-white text-[#1C1614] flex flex-col">
 
       {/* ── Header ── */}
-      <header className="border-b border-[#2A2F3A]/40 bg-[#0F1115]/80 backdrop-blur-xl">
+      <header className="border-b border-[#1C1614]/10 bg-white/80 backdrop-blur-xl">
         <div className="max-w-6xl mx-auto px-6 md:px-8 h-[68px] flex items-center justify-between">
           <a href="/" className="flex items-center">
             <Image
-              src="/flowmetry-logo-light.png"
+              src="/flowmetry-logo-kurz.png"
               alt="Flowmetry"
-              width={160}
+              width={44}
               height={44}
-              className="h-10 w-auto"
+              className="h-9 w-auto"
+              style={{ filter: 'brightness(0) saturate(100%) invert(30%) sepia(70%) saturate(400%) hue-rotate(355deg) brightness(1.1)' }}
               priority
             />
           </a>
           <a
             href="/"
-            className="text-sm text-[#6B7280] hover:text-[#9CA3AF] transition-colors"
+            className="text-sm text-[#1C1614]/45 hover:text-[#1C1614]/60 transition-colors"
           >
             ← Zurück zur Startseite
           </a>
@@ -35,29 +36,29 @@ export default function AGBPage() {
       <main className="flex-1 max-w-2xl mx-auto w-full px-6 md:px-8 py-16 md:py-24">
 
         <h1 className="text-3xl md:text-4xl font-bold mb-2 tracking-tight">AGB</h1>
-        <p className="text-[#6B7280] text-sm mb-10">Allgemeine Geschäftsbedingungen mit Kundeninformationen</p>
+        <p className="text-[#1C1614]/45 text-sm mb-10">Allgemeine Geschäftsbedingungen mit Kundeninformationen</p>
 
         {/* Inhaltsverzeichnis */}
-        <nav className="bg-[#161A22] border border-[#2A2F3A] rounded-xl p-5 mb-12">
-          <p className="text-[11px] text-[#6B7280] uppercase tracking-widest font-medium mb-3">Inhaltsverzeichnis</p>
-          <ol className="space-y-1.5 text-[#D1D5DB] text-sm list-decimal list-inside">
-            <li><a href="#s1" className="hover:text-white transition-colors">Geltungsbereich</a></li>
-            <li><a href="#s2" className="hover:text-white transition-colors">Vertragsschluss</a></li>
-            <li><a href="#s3" className="hover:text-white transition-colors">Widerrufsrecht</a></li>
-            <li><a href="#s4" className="hover:text-white transition-colors">Stornierung von Terminvereinbarungen</a></li>
-            <li><a href="#s5" className="hover:text-white transition-colors">Preise und Zahlungsbedingungen</a></li>
-            <li><a href="#s6" className="hover:text-white transition-colors">Haftung</a></li>
-            <li><a href="#s7" className="hover:text-white transition-colors">Anwendbares Recht</a></li>
-            <li><a href="#s8" className="hover:text-white transition-colors">Alternative Streitbeilegung</a></li>
+        <nav className="bg-[#F9F7F5] border border-[#1C1614]/10 rounded-xl p-5 mb-12">
+          <p className="text-[11px] text-[#1C1614]/45 uppercase tracking-widest font-medium mb-3">Inhaltsverzeichnis</p>
+          <ol className="space-y-1.5 text-[#1C1614]/75 text-sm list-decimal list-inside">
+            <li><a href="#s1" className="hover:text-[#1C1614] transition-colors">Geltungsbereich</a></li>
+            <li><a href="#s2" className="hover:text-[#1C1614] transition-colors">Vertragsschluss</a></li>
+            <li><a href="#s3" className="hover:text-[#1C1614] transition-colors">Widerrufsrecht</a></li>
+            <li><a href="#s4" className="hover:text-[#1C1614] transition-colors">Stornierung von Terminvereinbarungen</a></li>
+            <li><a href="#s5" className="hover:text-[#1C1614] transition-colors">Preise und Zahlungsbedingungen</a></li>
+            <li><a href="#s6" className="hover:text-[#1C1614] transition-colors">Haftung</a></li>
+            <li><a href="#s7" className="hover:text-[#1C1614] transition-colors">Anwendbares Recht</a></li>
+            <li><a href="#s8" className="hover:text-[#1C1614] transition-colors">Alternative Streitbeilegung</a></li>
           </ol>
         </nav>
 
         {/* Sections */}
-        <div className="space-y-10 text-[#D1D5DB] leading-relaxed text-sm md:text-base">
+        <div className="space-y-10 text-[#1C1614]/75 leading-relaxed text-sm md:text-base">
 
           {/* 1 */}
           <section id="s1">
-            <h2 className="text-lg font-semibold text-white mb-4">1) Geltungsbereich</h2>
+            <h2 className="text-lg font-semibold text-[#1C1614] mb-4">1) Geltungsbereich</h2>
             <p className="mb-4">
               1.1 Diese Allgemeinen Geschäftsbedingungen (nachfolgend „AGB") des Erik Neinstel,
               handelnd unter „Flowmetry.ai" (nachfolgend „wir/uns"), gelten für alle Verträge zur
@@ -76,11 +77,11 @@ export default function AGBPage() {
             </p>
           </section>
 
-          <hr className="border-[#2A2F3A]/60" />
+          <hr className="border-[#1C1614]/10" />
 
           {/* 2 */}
           <section id="s2">
-            <h2 className="text-lg font-semibold text-white mb-4">2) Vertragsschluss</h2>
+            <h2 className="text-lg font-semibold text-[#1C1614] mb-4">2) Vertragsschluss</h2>
             <p>
               Du kannst per Telefon, Fax, E-Mail, Brief oder über das auf unserer Website
               vorgehaltene Online-Kontaktformular eine unverbindliche Anfrage auf Abgabe eines
@@ -99,26 +100,26 @@ export default function AGBPage() {
             </p>
           </section>
 
-          <hr className="border-[#2A2F3A]/60" />
+          <hr className="border-[#1C1614]/10" />
 
           {/* 3 */}
           <section id="s3">
-            <h2 className="text-lg font-semibold text-white mb-4">3) Widerrufsrecht</h2>
+            <h2 className="text-lg font-semibold text-[#1C1614] mb-4">3) Widerrufsrecht</h2>
             <p>
               Verbrauchern steht grundsätzlich ein Widerrufsrecht zu. Nähere Informationen zum
               Widerrufsrecht ergeben sich aus unserer{" "}
-              <a href="/widerrufsbelehrung" className="text-[#9CA3AF] hover:text-white transition-colors underline underline-offset-2">
+              <a href="/widerrufsbelehrung" className="text-[#8B4A1E] hover:text-[#1C1614] transition-colors underline underline-offset-2">
                 Widerrufsbelehrung
               </a>
               .
             </p>
           </section>
 
-          <hr className="border-[#2A2F3A]/60" />
+          <hr className="border-[#1C1614]/10" />
 
           {/* 4 */}
           <section id="s4">
-            <h2 className="text-lg font-semibold text-white mb-4">4) Stornierung von Terminvereinbarungen</h2>
+            <h2 className="text-lg font-semibold text-[#1C1614] mb-4">4) Stornierung von Terminvereinbarungen</h2>
             <p className="mb-4">
               4.1 Unabhängig von einem ggf. bestehenden gesetzlichen Widerrufsrecht räumen wir dir
               das Recht ein, deine Terminvereinbarung für unsere Leistung nach folgender Maßgabe
@@ -140,11 +141,11 @@ export default function AGBPage() {
             </p>
           </section>
 
-          <hr className="border-[#2A2F3A]/60" />
+          <hr className="border-[#1C1614]/10" />
 
           {/* 5 */}
           <section id="s5">
-            <h2 className="text-lg font-semibold text-white mb-4">5) Preise und Zahlungsbedingungen</h2>
+            <h2 className="text-lg font-semibold text-[#1C1614] mb-4">5) Preise und Zahlungsbedingungen</h2>
             <p>
               Sofern sich aus unserer Leistungsbeschreibung nichts anderes ergibt, handelt es sich
               bei den angegebenen Preisen um Gesamtpreise. Umsatzsteuer fällt nicht an, da wir als
@@ -152,11 +153,11 @@ export default function AGBPage() {
             </p>
           </section>
 
-          <hr className="border-[#2A2F3A]/60" />
+          <hr className="border-[#1C1614]/10" />
 
           {/* 6 */}
           <section id="s6">
-            <h2 className="text-lg font-semibold text-white mb-4">6) Haftung</h2>
+            <h2 className="text-lg font-semibold text-[#1C1614] mb-4">6) Haftung</h2>
             <p className="mb-4">
               Wir haften dir aus allen vertraglichen, vertragsähnlichen und gesetzlichen, auch
               deliktischen Ansprüchen auf Schadens- und Aufwendungsersatz wie folgt:
@@ -164,7 +165,7 @@ export default function AGBPage() {
             <p className="mb-3">
               6.1 Wir haften aus jedem Rechtsgrund uneingeschränkt
             </p>
-            <ul className="list-disc list-inside space-y-1.5 pl-2 mb-4 text-[#C9D0DC]">
+            <ul className="list-disc list-inside space-y-1.5 pl-2 mb-4 text-[#1C1614]/65">
               <li>bei Vorsatz oder grober Fahrlässigkeit,</li>
               <li>bei vorsätzlicher oder fahrlässiger Verletzung des Lebens, des Körpers oder der Gesundheit,</li>
               <li>aufgrund eines Garantieversprechens, soweit diesbezüglich nichts anderes geregelt ist,</li>
@@ -187,11 +188,11 @@ export default function AGBPage() {
             </p>
           </section>
 
-          <hr className="border-[#2A2F3A]/60" />
+          <hr className="border-[#1C1614]/10" />
 
           {/* 7 */}
           <section id="s7">
-            <h2 className="text-lg font-semibold text-white mb-4">7) Anwendbares Recht</h2>
+            <h2 className="text-lg font-semibold text-[#1C1614] mb-4">7) Anwendbares Recht</h2>
             <p className="mb-4">
               7.1 Für sämtliche Rechtsbeziehungen zwischen dir und uns gilt das Recht der
               Bundesrepublik Deutschland unter Ausschluss der Gesetze über den internationalen Kauf
@@ -207,11 +208,11 @@ export default function AGBPage() {
             </p>
           </section>
 
-          <hr className="border-[#2A2F3A]/60" />
+          <hr className="border-[#1C1614]/10" />
 
           {/* 8 */}
           <section id="s8">
-            <h2 className="text-lg font-semibold text-white mb-4">8) Alternative Streitbeilegung</h2>
+            <h2 className="text-lg font-semibold text-[#1C1614] mb-4">8) Alternative Streitbeilegung</h2>
             <p>
               Wir sind zur Teilnahme an einem Streitbeilegungsverfahren vor einer
               Verbraucherschlichtungsstelle weder verpflichtet noch bereit.
@@ -219,22 +220,22 @@ export default function AGBPage() {
           </section>
 
           {/* Stand */}
-          <p className="text-[11px] text-[#4B5563] pt-4">Stand: 06.03.2026, 16:15:48</p>
+          <p className="text-[11px] text-[#1C1614]/35 pt-4">Stand: 06.03.2026, 16:15:48</p>
 
         </div>
       </main>
 
       {/* ── Footer ── */}
-      <footer className="border-t border-[#2A2F3A]/40 py-8">
+      <footer className="border-t border-[#1C1614]/10 py-8">
         <div className="max-w-6xl mx-auto px-6 md:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-[#6B7280] text-sm">
+          <p className="text-[#1C1614]/45 text-sm">
             © {new Date().getFullYear()} Flowmetry. Alle Rechte vorbehalten.
           </p>
           <div className="flex items-center gap-5">
-            <a href="/impressum" className="text-[#6B7280] hover:text-[#9CA3AF] text-sm transition-colors">Impressum</a>
-            <a href="/datenschutz" className="text-[#6B7280] hover:text-[#9CA3AF] text-sm transition-colors">Datenschutz</a>
-            <a href="/agb" className="text-[#9CA3AF] text-sm">AGB</a>
-            <a href="/widerrufsbelehrung" className="text-[#6B7280] hover:text-[#9CA3AF] text-sm transition-colors">Widerrufsbelehrung</a>
+            <a href="/impressum" className="text-[#1C1614]/45 hover:text-[#1C1614]/60 text-sm transition-colors">Impressum</a>
+            <a href="/datenschutz" className="text-[#1C1614]/45 hover:text-[#1C1614]/60 text-sm transition-colors">Datenschutz</a>
+            <a href="/agb" className="text-[#8B4A1E] text-sm">AGB</a>
+            <a href="/widerrufsbelehrung" className="text-[#1C1614]/45 hover:text-[#1C1614]/60 text-sm transition-colors">Widerrufsbelehrung</a>
           </div>
         </div>
       </footer>

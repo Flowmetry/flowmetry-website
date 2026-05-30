@@ -7,24 +7,25 @@ export const metadata: Metadata = {
 
 export default function ImpressumPage() {
   return (
-    <div className="min-h-screen bg-[#0F1115] text-white flex flex-col">
+    <div className="min-h-screen bg-white text-[#1C1614] flex flex-col">
 
       {/* ── Header ── */}
-      <header className="border-b border-[#2A2F3A]/40 bg-[#0F1115]/80 backdrop-blur-xl">
+      <header className="border-b border-[#1C1614]/10 bg-white/80 backdrop-blur-xl">
         <div className="max-w-6xl mx-auto px-6 md:px-8 h-[68px] flex items-center justify-between">
           <a href="/" className="flex items-center">
             <Image
-              src="/flowmetry-logo-light.png"
+              src="/flowmetry-logo-kurz.png"
               alt="Flowmetry"
-              width={160}
+              width={44}
               height={44}
-              className="h-10 w-auto"
+              className="h-9 w-auto"
+              style={{ filter: 'brightness(0) saturate(100%) invert(30%) sepia(70%) saturate(400%) hue-rotate(355deg) brightness(1.1)' }}
               priority
             />
           </a>
           <a
             href="/"
-            className="text-sm text-[#6B7280] hover:text-[#9CA3AF] transition-colors"
+            className="text-sm text-[#1C1614]/45 hover:text-[#1C1614]/60 transition-colors"
           >
             ← Zurück zur Startseite
           </a>
@@ -38,11 +39,11 @@ export default function ImpressumPage() {
           Impressum
         </h1>
 
-        <div className="space-y-8 text-[#D1D5DB] leading-relaxed">
+        <div className="space-y-8 text-[#1C1614]/75 leading-relaxed">
 
           {/* Angaben */}
           <section>
-            <p className="font-semibold text-white mb-2">Angaben gemäß § 5 TMG</p>
+            <p className="font-semibold text-[#1C1614] mb-2">Angaben gemäß § 5 TMG</p>
             <p>
               Erik Neinstel<br />
               Flowmetry.ai<br />
@@ -54,16 +55,16 @@ export default function ImpressumPage() {
 
           {/* Kontakt */}
           <section>
-            <p className="font-semibold text-white mb-2">Kontakt</p>
+            <p className="font-semibold text-[#1C1614] mb-2">Kontakt</p>
             <p>
-              Tel.: <a href="tel:+4915757760133" className="text-[#9CA3AF] hover:text-white transition-colors">015757760133</a><br />
-              E-Mail: <a href="mailto:kontakt@flowmetry.ai" className="text-[#9CA3AF] hover:text-white transition-colors">kontakt@flowmetry.ai</a>
+              Tel.: <a href="tel:+4915757760133" className="text-[#8B4A1E] hover:text-[#1C1614] transition-colors">015757760133</a><br />
+              E-Mail: <a href="mailto:kontakt@flowmetry.ai" className="text-[#8B4A1E] hover:text-[#1C1614] transition-colors">kontakt@flowmetry.ai</a>
             </p>
           </section>
 
           {/* Umsatzsteuer */}
           <section>
-            <p className="font-semibold text-white mb-2">Umsatzsteuer</p>
+            <p className="font-semibold text-[#1C1614] mb-2">Umsatzsteuer</p>
             <p>
               Umsatzsteuer-Identifikationsnummer: DE359840120<br />
               Umsatzsteuerbefreit (Kleinunternehmerregelung)
@@ -72,7 +73,7 @@ export default function ImpressumPage() {
 
           {/* Streitschlichtung */}
           <section>
-            <p className="font-semibold text-white mb-2">Streitschlichtung</p>
+            <p className="font-semibold text-[#1C1614] mb-2">Streitschlichtung</p>
             <p>
               Wir sind zur Teilnahme an einem Streitbeilegungsverfahren vor einer
               Verbraucherschlichtungsstelle weder verpflichtet noch bereit.
@@ -83,16 +84,16 @@ export default function ImpressumPage() {
       </main>
 
       {/* ── Footer ── */}
-      <footer className="border-t border-[#2A2F3A]/40 py-8">
+      <footer className="border-t border-[#1C1614]/10 py-8">
         <div className="max-w-6xl mx-auto px-6 md:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-[#6B7280] text-sm">
+          <p className="text-[#1C1614]/45 text-sm">
             © {new Date().getFullYear()} Flowmetry. Alle Rechte vorbehalten.
           </p>
           <div className="flex items-center gap-5">
-            <a href="/impressum" className="text-[#9CA3AF] text-sm">Impressum</a>
-            <a href="/datenschutz" className="text-[#6B7280] hover:text-[#9CA3AF] text-sm transition-colors">Datenschutz</a>
-            <a href="/agb" className="text-[#6B7280] hover:text-[#9CA3AF] text-sm transition-colors">AGB</a>
-            <a href="/widerrufsbelehrung" className="text-[#6B7280] hover:text-[#9CA3AF] text-sm transition-colors">Widerrufsbelehrung</a>
+            <a href="/impressum" className="text-[#8B4A1E] text-sm">Impressum</a>
+            <a href="/datenschutz" className="text-[#1C1614]/45 hover:text-[#1C1614]/60 text-sm transition-colors">Datenschutz</a>
+            <a href="/agb" className="text-[#1C1614]/45 hover:text-[#1C1614]/60 text-sm transition-colors">AGB</a>
+            <a href="/widerrufsbelehrung" className="text-[#1C1614]/45 hover:text-[#1C1614]/60 text-sm transition-colors">Widerrufsbelehrung</a>
           </div>
         </div>
       </footer>

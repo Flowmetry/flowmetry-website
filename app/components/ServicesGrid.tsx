@@ -14,14 +14,14 @@ const servicesItems: ServiceItem[] = [
     title: 'KI-Vertrieb & Lead-Generierung',
     description:
       'Keine kalten Anfragen mehr manuell aussortieren. KI-Chatbots auf der Webseite, automatische Qualifizierung und smarte Follow-ups.',
-    color: '#3B82F6',
+    color: '#cd9b7b',
   },
   {
     id: 'backoffice',
     title: 'Backoffice- & Admin-Automatisierung',
     description:
       'Schluss mit manuellem Abtippen. Automatische Rechnungsverarbeitung, E-Mail-Sortierung und Dokumentenerstellung.',
-    color: '#22D3EE',
+    color: '#b8815e',
   },
   {
     id: 'crm',
@@ -76,13 +76,13 @@ export function ServicesGrid() {
       <div className="max-w-6xl mx-auto px-6">
 
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-extralight text-white mb-3">
+          <h2 className="text-3xl md:text-4xl font-extralight text-[#1C1614] mb-3">
             Möglichkeiten der{' '}
-            <span className="bg-gradient-to-r from-[#A0F0FF] to-[#60D8FF] bg-clip-text text-transparent">
+            <span className="bg-clip-text text-transparent" style={{ backgroundImage: 'linear-gradient(to right, #cd9b7b, #b8815e)' }}>
               Automatisierung
             </span>
           </h2>
-          <p className="text-white/80 text-sm max-w-sm mx-auto">
+          <p className="text-[#1C1614]/55 text-sm max-w-sm mx-auto">
             Von Vertrieb bis Support – wir automatisieren die Prozesse, die dein Team ausbremsen.
           </p>
         </div>
@@ -105,18 +105,18 @@ export function ServicesGrid() {
                 className="flex flex-col h-full w-full rounded-2xl overflow-hidden"
                 style={{
                   background: active
-                    ? `linear-gradient(135deg, rgba(28,32,40,0.65) 0%, rgba(22,26,34,0.65) 100%)`
-                    : 'rgba(18,21,28,0.45)',
+                    ? `rgba(255,255,255,0.85)`
+                    : 'rgba(255,255,255,0.55)',
                   backdropFilter: active ? 'blur(8px)' : 'blur(2px)',
                   WebkitBackdropFilter: active ? 'blur(8px)' : 'blur(2px)',
-                  border: `1px solid ${item.color}50`,
-                  boxShadow: isActive ? `0 0 60px ${item.color}20, inset 0 0 0 0.5px ${item.color}30` : `inset 0 0 0 0.5px ${item.color}20`,
+                  border: `1px solid ${item.color}40`,
+                  boxShadow: isActive ? `0 0 40px ${item.color}15, inset 0 0 0 0.5px ${item.color}25` : `inset 0 0 0 0.5px ${item.color}15`,
                 }}
               >
                 {/* Animation area */}
                 <div
                   className="h-[180px] w-full flex-shrink-0"
-                  style={{ borderBottom: '0.5px solid rgba(255,255,255,0.05)', background: 'rgba(0,0,0,0.2)' }}
+                  style={{ borderBottom: '0.5px solid rgba(28,22,20,0.06)', background: 'rgba(249,248,246,0.6)' }}
                 >
                   {item.id === 'lead-gen' && <LeadGenAnimation />}
                   {item.id === 'backoffice' && <BackofficeAnimation />}
@@ -126,10 +126,10 @@ export function ServicesGrid() {
 
                 {/* Text area */}
                 <div className="p-6 flex flex-col justify-center flex-1">
-                  <h3 className="text-base font-semibold text-white mb-1.5 leading-snug">
+                  <h3 className="text-base font-semibold text-[#1C1614] mb-1.5 leading-snug">
                     {item.title}
                   </h3>
-                  <p className="text-sm text-white/50 leading-relaxed">
+                  <p className="text-sm text-[#1C1614]/50 leading-relaxed">
                     {item.description}
                   </p>
                 </div>

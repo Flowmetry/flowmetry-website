@@ -7,24 +7,25 @@ export const metadata: Metadata = {
 
 export default function DatenschutzPage() {
   return (
-    <div className="min-h-screen bg-[#0F1115] text-white flex flex-col">
+    <div className="min-h-screen bg-white text-[#1C1614] flex flex-col">
 
       {/* ── Header ── */}
-      <header className="border-b border-[#2A2F3A]/40 bg-[#0F1115]/80 backdrop-blur-xl">
+      <header className="border-b border-[#1C1614]/10 bg-white/80 backdrop-blur-xl">
         <div className="max-w-6xl mx-auto px-6 md:px-8 h-[68px] flex items-center justify-between">
           <a href="/" className="flex items-center">
             <Image
-              src="/flowmetry-logo-light.png"
+              src="/flowmetry-logo-kurz.png"
               alt="Flowmetry"
-              width={160}
+              width={44}
               height={44}
-              className="h-10 w-auto"
+              className="h-9 w-auto"
+              style={{ filter: 'brightness(0) saturate(100%) invert(30%) sepia(70%) saturate(400%) hue-rotate(355deg) brightness(1.1)' }}
               priority
             />
           </a>
           <a
             href="/"
-            className="text-sm text-[#6B7280] hover:text-[#9CA3AF] transition-colors"
+            className="text-sm text-[#1C1614]/45 hover:text-[#1C1614]/60 transition-colors"
           >
             ← Zurück zur Startseite
           </a>
@@ -35,34 +36,34 @@ export default function DatenschutzPage() {
       <main className="flex-1 max-w-2xl mx-auto w-full px-6 md:px-8 py-16 md:py-24">
 
         <h1 className="text-3xl md:text-4xl font-bold mb-2 tracking-tight">Datenschutz</h1>
-        <p className="text-[#6B7280] text-sm mb-10">Datenschutzerklärung</p>
+        <p className="text-[#1C1614]/45 text-sm mb-10">Datenschutzerklärung</p>
 
-        <div className="space-y-10 text-[#D1D5DB] leading-relaxed text-sm md:text-base">
+        <div className="space-y-10 text-[#1C1614]/75 leading-relaxed text-sm md:text-base">
 
           {/* 1 */}
           <section id="s1">
-            <h2 className="text-lg font-semibold text-white mb-5">
+            <h2 className="text-lg font-semibold text-[#1C1614] mb-5">
               1) Einleitung und Kontaktdaten des Verantwortlichen
             </h2>
 
             <div className="space-y-4">
               <p>
-                <strong className="text-white">1.1</strong>{" "}
+                <strong className="text-[#1C1614]">1.1</strong>{" "}
                 Wir freuen uns, dass du unsere Website besuchst und bedanken uns für dein Interesse.
                 Im Folgenden informieren wir dich über den Umgang mit deinen personenbezogenen Daten
                 bei der Nutzung unserer Website. Personenbezogene Daten sind hierbei alle Daten, mit
                 denen du persönlich identifiziert werden kannst.
               </p>
               <p>
-                <strong className="text-white">1.2</strong>{" "}
+                <strong className="text-[#1C1614]">1.2</strong>{" "}
                 Verantwortlicher für die Datenverarbeitung auf dieser Website im Sinne der
                 Datenschutz-Grundverordnung (DSGVO) ist Erik Neinstel, Flowmetry.ai,
                 Edelbergstraße 9a, 76189 Karlsruhe, Deutschland, Tel.:{" "}
-                <a href="tel:+4915757760133" className="text-[#9CA3AF] hover:text-white transition-colors">
+                <a href="tel:+4915757760133" className="text-[#8B4A1E] hover:text-[#1C1614] transition-colors">
                   015757760133
                 </a>
                 , E-Mail:{" "}
-                <a href="mailto:kontakt@flowmetry.ai" className="text-[#9CA3AF] hover:text-white transition-colors">
+                <a href="mailto:kontakt@flowmetry.ai" className="text-[#8B4A1E] hover:text-[#1C1614] transition-colors">
                   kontakt@flowmetry.ai
                 </a>
                 . Der für die Verarbeitung von personenbezogenen Daten Verantwortliche ist
@@ -72,24 +73,24 @@ export default function DatenschutzPage() {
             </div>
           </section>
 
-          <hr className="border-[#2A2F3A]/60" />
+          <hr className="border-[#1C1614]/10" />
 
           {/* 2 */}
           <section id="s2">
-            <h2 className="text-lg font-semibold text-white mb-5">
+            <h2 className="text-lg font-semibold text-[#1C1614] mb-5">
               2) Datenerfassung beim Besuch unserer Website
             </h2>
 
             <div className="space-y-4">
               <p>
-                <strong className="text-white">2.1</strong>{" "}
+                <strong className="text-[#1C1614]">2.1</strong>{" "}
                 Bei der bloß informatorischen Nutzung unserer Website, also wenn du dich nicht
                 registrierst oder uns anderweitig Informationen übermittelst, erheben wir nur solche
                 Daten, die dein Browser an den Seitenserver übermittelt (sog. „Server-Logfiles").
                 Wenn du unsere Website aufrufst, erheben wir die folgenden Daten, die für uns
                 technisch erforderlich sind, um dir die Website anzuzeigen:
               </p>
-              <ul className="list-disc list-inside space-y-1.5 pl-2 text-[#C9D0DC]">
+              <ul className="list-disc list-inside space-y-1.5 pl-2 text-[#1C1614]/65">
                 <li>Unsere besuchte Website</li>
                 <li>Datum und Uhrzeit zum Zeitpunkt des Zugriffs</li>
                 <li>Menge der gesendeten Daten in Byte</li>
@@ -107,7 +108,7 @@ export default function DatenschutzPage() {
               </p>
 
               <p>
-                <strong className="text-white">2.2</strong>{" "}
+                <strong className="text-[#1C1614]">2.2</strong>{" "}
                 Diese Website nutzt aus Sicherheitsgründen und zum Schutz der Übertragung
                 personenbezogener Daten und anderer vertraulicher Inhalte (z.B. Bestellungen oder
                 Anfragen an uns) eine SSL- bzw. TLS-Verschlüsselung. Du kannst eine verschlüsselte
@@ -117,18 +118,18 @@ export default function DatenschutzPage() {
             </div>
           </section>
 
-          <hr className="border-[#2A2F3A]/60" />
+          <hr className="border-[#1C1614]/10" />
 
           {/* 3 */}
           <section id="s3">
-            <h2 className="text-lg font-semibold text-white mb-5">
+            <h2 className="text-lg font-semibold text-[#1C1614] mb-5">
               3) Hosting &amp; Content-Delivery-Network
             </h2>
 
             <div className="space-y-6">
 
               <div>
-                <p className="font-medium text-white mb-2">3.1 GitHub</p>
+                <p className="font-medium text-[#1C1614] mb-2">3.1 GitHub</p>
                 <p className="mb-3">
                   Für das Hosting unserer Website und die Darstellung der Seiteninhalte nutzen wir
                   das System des folgenden Anbieters: GitHub Inc., 88 Colin P Kelly Jr Street, San
@@ -153,7 +154,7 @@ export default function DatenschutzPage() {
               </div>
 
               <div>
-                <p className="font-medium text-white mb-2">3.2 HighLevel</p>
+                <p className="font-medium text-[#1C1614] mb-2">3.2 HighLevel</p>
                 <p className="mb-3">
                   Für das Hosting unserer Website und die Darstellung der Seiteninhalte nutzen wir
                   das System des folgenden Anbieters: HighLevel Inc., 400 North Saint Paul St.,
@@ -178,7 +179,7 @@ export default function DatenschutzPage() {
               </div>
 
               <div>
-                <p className="font-medium text-white mb-2">3.3 Vercel</p>
+                <p className="font-medium text-[#1C1614] mb-2">3.3 Vercel</p>
                 <p className="mb-3">
                   Für das Hosting unserer Website und die Darstellung der Seiteninhalte nutzen wir
                   das System des folgenden Anbieters: Vercel Inc., 340 S Lemon Ave #4133, Walnut,
@@ -199,7 +200,7 @@ export default function DatenschutzPage() {
               </div>
 
               <div>
-                <p className="font-medium text-white mb-2">3.4 Cloudflare</p>
+                <p className="font-medium text-[#1C1614] mb-2">3.4 Cloudflare</p>
                 <p className="mb-3">
                   Wir nutzen ein Content Delivery Network des folgenden Anbieters: Cloudflare Inc.,
                   101 Townsend St. San Francisco, CA 94107, USA.
@@ -222,7 +223,7 @@ export default function DatenschutzPage() {
               </div>
 
               <div>
-                <p className="font-medium text-white mb-2">3.5 Google Cloud CDN</p>
+                <p className="font-medium text-[#1C1614] mb-2">3.5 Google Cloud CDN</p>
                 <p className="mb-3">
                   Wir nutzen ein Content Delivery Network des folgenden Anbieters: Google Ireland
                   Limited, Gordon House, 4 Barrow St, Dublin, D04 E5W5, Irland.
@@ -249,7 +250,7 @@ export default function DatenschutzPage() {
               </div>
 
               <div>
-                <p className="font-medium text-white mb-2">3.6 Vercel (CDN)</p>
+                <p className="font-medium text-[#1C1614] mb-2">3.6 Vercel (CDN)</p>
                 <p className="mb-3">
                   Wir nutzen ein Content Delivery Network des folgenden Anbieters: Vercel Inc.,
                   440 N Barranca Avenue #4133, Covina, CA 91723, USA.
@@ -274,11 +275,11 @@ export default function DatenschutzPage() {
             </div>
           </section>
 
-          <hr className="border-[#2A2F3A]/60" />
+          <hr className="border-[#1C1614]/10" />
 
           {/* 4 */}
           <section id="s4">
-            <h2 className="text-lg font-semibold text-white mb-5">4) Cookies</h2>
+            <h2 className="text-lg font-semibold text-[#1C1614] mb-5">4) Cookies</h2>
             <div className="space-y-4">
               <p>
                 Um den Besuch unserer Website attraktiv zu gestalten und die Nutzung bestimmter
@@ -309,16 +310,16 @@ export default function DatenschutzPage() {
             </div>
           </section>
 
-          <hr className="border-[#2A2F3A]/60" />
+          <hr className="border-[#1C1614]/10" />
 
           {/* 5 */}
           <section id="s5">
-            <h2 className="text-lg font-semibold text-white mb-5">5) Kontaktaufnahme</h2>
+            <h2 className="text-lg font-semibold text-[#1C1614] mb-5">5) Kontaktaufnahme</h2>
 
             <div className="space-y-6">
 
               <div>
-                <p className="font-medium text-white mb-2">5.1 Babelforce</p>
+                <p className="font-medium text-[#1C1614] mb-2">5.1 Babelforce</p>
                 <p className="mb-3">
                   Die Webseite nutzt die Dienste von „Babelforce", einer
                   Kundendienst-Integrationsplattform der babelforce GmbH, Mindspace, Friedrichstr.
@@ -345,10 +346,10 @@ export default function DatenschutzPage() {
               </div>
 
               {/* Sub-providers within 5.1 */}
-              <div className="bg-[#161A22] border border-[#2A2F3A] rounded-xl p-5 space-y-6">
+              <div className="bg-[#F9F7F5] border border-[#1C1614]/10 rounded-xl p-5 space-y-6">
 
                 <div>
-                  <p className="font-medium text-white mb-3">Anthropic Claude</p>
+                  <p className="font-medium text-[#1C1614] mb-3">Anthropic Claude</p>
                   <p className="mb-3">
                     Auf dieser Website haben wir zur Bereitstellung eines autonomen Kundensupports
                     eine Software-Lösung mit künstlicher Intelligenz des folgenden Anbieters
@@ -400,10 +401,10 @@ export default function DatenschutzPage() {
                   </p>
                 </div>
 
-                <hr className="border-[#2A2F3A]/60" />
+                <hr className="border-[#1C1614]/10" />
 
                 <div>
-                  <p className="font-medium text-white mb-3">Google Gemini</p>
+                  <p className="font-medium text-[#1C1614] mb-3">Google Gemini</p>
                   <p className="mb-3">
                     Auf dieser Website haben wir zur Bereitstellung eines autonomen Kundensupports
                     eine Software-Lösung mit künstlicher Intelligenz des folgenden Anbieters
@@ -461,17 +462,17 @@ export default function DatenschutzPage() {
                       href="https://support.google.com/gemini/answer/13594961?hl=de"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-[#9CA3AF] hover:text-white transition-colors break-all"
+                      className="text-[#8B4A1E] hover:text-[#1C1614] transition-colors break-all"
                     >
                       https://support.google.com/gemini/answer/13594961?hl=de
                     </a>
                   </p>
                 </div>
 
-                <hr className="border-[#2A2F3A]/60" />
+                <hr className="border-[#1C1614]/10" />
 
                 <div>
-                  <p className="font-medium text-white mb-3">OpenAI</p>
+                  <p className="font-medium text-[#1C1614] mb-3">OpenAI</p>
                   <p className="mb-3">
                     Auf dieser Website haben wir zur Bereitstellung eines autonomen Kundensupports
                     eine Software-Lösung mit künstlicher Intelligenz des folgenden Anbieters
@@ -527,7 +528,7 @@ export default function DatenschutzPage() {
               </div>
 
               <div>
-                <p className="font-medium text-white mb-2">5.2 Eigene Bewertungserinnerung</p>
+                <p className="font-medium text-[#1C1614] mb-2">5.2 Eigene Bewertungserinnerung</p>
                 <p>
                   Ausschließlich auf Basis deiner ausdrücklichen Einwilligung gemäß Art. 6 Abs. 1
                   lit. a DSGVO verwenden wir deine E-Mailadresse zur einmaligen Erinnerung an die
@@ -537,7 +538,7 @@ export default function DatenschutzPage() {
               </div>
 
               <div>
-                <p className="font-medium text-white mb-2">5.3 Google Calendar</p>
+                <p className="font-medium text-[#1C1614] mb-2">5.3 Google Calendar</p>
                 <p className="mb-3">
                   Für die Bereitstellung einer Online-Terminbuchungsfunktion nutzen wir die Dienste
                   des folgenden Anbieters: Google Ireland Limited, Gordon House, 4 Barrow St,
@@ -570,7 +571,7 @@ export default function DatenschutzPage() {
               </div>
 
               <div>
-                <p className="font-medium text-white mb-2">5.4 HighLevel</p>
+                <p className="font-medium text-[#1C1614] mb-2">5.4 HighLevel</p>
                 <p className="mb-3">
                   Für die Bereitstellung einer Online-Terminbuchungsfunktion nutzen wir die Dienste
                   des folgenden Anbieters: HighLevel Inc., 400 North Saint Paul St., Suite 920,
@@ -603,7 +604,7 @@ export default function DatenschutzPage() {
 
               <div>
                 <p>
-                  <strong className="text-white">5.5</strong>{" "}
+                  <strong className="text-[#1C1614]">5.5</strong>{" "}
                   Im Rahmen der Kontaktaufnahme mit uns (z.B. per Kontaktformular oder E-Mail)
                   werden – ausschließlich zum Zweck der Bearbeitung und Beantwortung deines
                   Anliegens und nur im dafür erforderlichen Umfang – personenbezogene Daten
@@ -622,17 +623,17 @@ export default function DatenschutzPage() {
             </div>
           </section>
 
-          <hr className="border-[#2A2F3A]/60" />
+          <hr className="border-[#1C1614]/10" />
 
           {/* 6 */}
           <section id="s6">
-            <h2 className="text-lg font-semibold text-white mb-5">
+            <h2 className="text-lg font-semibold text-[#1C1614] mb-5">
               6) Datenverarbeitung zur Vertragsabwicklung
             </h2>
 
             <div className="space-y-6">
               <p>
-                <strong className="text-white">6.1</strong>{" "}
+                <strong className="text-[#1C1614]">6.1</strong>{" "}
                 Zur Abwicklung des Vertrags arbeiten wir mit dem / den nachstehenden
                 Dienstleister(n) zusammen, die uns ganz oder teilweise bei der Durchführung
                 geschlossener Verträge unterstützen. An diese Dienstleister werden nach Maßgabe
@@ -640,7 +641,7 @@ export default function DatenschutzPage() {
               </p>
 
               <div>
-                <p className="font-medium text-white mb-2">6.2 Verwendung von Paymentdienstleistern — Stripe</p>
+                <p className="font-medium text-[#1C1614] mb-2">6.2 Verwendung von Paymentdienstleistern — Stripe</p>
                 <p className="mb-3">
                   Auf dieser Website stehen eine oder mehrere Online-Zahlungsarten des folgenden
                   Anbieters zur Verfügung: Stripe Payments Europe Ltd., 1 Grand Canal Street Lower,
@@ -689,16 +690,16 @@ export default function DatenschutzPage() {
             </div>
           </section>
 
-          <hr className="border-[#2A2F3A]/60" />
+          <hr className="border-[#1C1614]/10" />
 
           {/* 7 */}
           <section id="s7">
-            <h2 className="text-lg font-semibold text-white mb-5">7) Seitenfunktionalitäten</h2>
+            <h2 className="text-lg font-semibold text-[#1C1614] mb-5">7) Seitenfunktionalitäten</h2>
 
             <div className="space-y-6">
 
               <div>
-                <p className="font-medium text-white mb-2">7.1 n8n</p>
+                <p className="font-medium text-[#1C1614] mb-2">7.1 n8n</p>
                 <p className="mb-3">
                   Diese Website verwendet zur Integration und Synchronisation von Datenbanken und
                   Web-Anwendungen die Dienste des folgenden Anbieters: n8n GmbH, Novalisstr. 10,
@@ -719,7 +720,7 @@ export default function DatenschutzPage() {
               </div>
 
               <div>
-                <p className="font-medium text-white mb-2">7.2 Google Meet</p>
+                <p className="font-medium text-[#1C1614] mb-2">7.2 Google Meet</p>
                 <p className="mb-3">
                   Für die Durchführung von Online-Meetings, Videokonferenzen und/oder Webinaren
                   nutzen wir diesen Anbieter: Google Ireland Limited, Gordon House, 4 Barrow St,
@@ -769,7 +770,7 @@ export default function DatenschutzPage() {
                     href="https://business.safety.google/intl/de/privacy/"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-[#9CA3AF] hover:text-white transition-colors break-all"
+                    className="text-[#8B4A1E] hover:text-[#1C1614] transition-colors break-all"
                   >
                     https://business.safety.google/intl/de/privacy/
                   </a>
@@ -777,7 +778,7 @@ export default function DatenschutzPage() {
               </div>
 
               <div>
-                <p className="font-medium text-white mb-2">7.3 Zoom</p>
+                <p className="font-medium text-[#1C1614] mb-2">7.3 Zoom</p>
                 <p className="mb-3">
                   Für die Durchführung von Online-Meetings, Videokonferenzen und/oder Webinaren
                   nutzen wir diesen Anbieter: Zoom Video Communications Inc., 55 Almaden Blvd,
@@ -820,7 +821,7 @@ export default function DatenschutzPage() {
               </div>
 
               <div>
-                <p className="font-medium text-white mb-2">7.4 Google Forms</p>
+                <p className="font-medium text-[#1C1614] mb-2">7.4 Google Forms</p>
                 <p className="mb-3">
                   Für die Durchführung von Umfragen oder bei Online-Formularen verwenden wir die
                   Dienste des folgenden Anbieters: Google Ireland Ltd., Gordon House, Barrow Street,
@@ -866,7 +867,7 @@ export default function DatenschutzPage() {
               </div>
 
               <div>
-                <p className="font-medium text-white mb-2">7.5 HighLevel</p>
+                <p className="font-medium text-[#1C1614] mb-2">7.5 HighLevel</p>
                 <p className="mb-3">
                   Für die Durchführung von Umfragen oder bei Online-Formularen verwenden wir die
                   Dienste des folgenden Anbieters: HighLevel Inc., 400 North Saint Paul St., Suite
@@ -902,7 +903,7 @@ export default function DatenschutzPage() {
               </div>
 
               <div>
-                <p className="font-medium text-white mb-2">7.6 Typeform</p>
+                <p className="font-medium text-[#1C1614] mb-2">7.6 Typeform</p>
                 <p className="mb-3">
                   Für die Durchführung von Umfragen oder bei Online-Formularen verwenden wir die
                   Dienste des folgenden Anbieters: TYPEFORM SL, Carrer de Can Rabia 3-5, 4. Etage,
@@ -940,14 +941,14 @@ export default function DatenschutzPage() {
             </div>
           </section>
 
-          <hr className="border-[#2A2F3A]/60" />
+          <hr className="border-[#1C1614]/10" />
 
           {/* 8 */}
           <section id="s8">
-            <h2 className="text-lg font-semibold text-white mb-5">8) Tools und Sonstiges</h2>
+            <h2 className="text-lg font-semibold text-[#1C1614] mb-5">8) Tools und Sonstiges</h2>
 
             <div className="space-y-4">
-              <p className="font-medium text-white">Cookie-Consent-Tool</p>
+              <p className="font-medium text-[#1C1614]">Cookie-Consent-Tool</p>
               <p>
                 Diese Website nutzt zur Einholung wirksamer Nutzereinwilligungen für
                 einwilligungspflichtige Cookies und cookie-basierte Anwendungen ein sog.
@@ -991,22 +992,22 @@ export default function DatenschutzPage() {
             </div>
           </section>
 
-          <hr className="border-[#2A2F3A]/60" />
+          <hr className="border-[#1C1614]/10" />
 
           {/* 9 */}
           <section id="s9">
-            <h2 className="text-lg font-semibold text-white mb-5">9) Rechte des Betroffenen</h2>
+            <h2 className="text-lg font-semibold text-[#1C1614] mb-5">9) Rechte des Betroffenen</h2>
 
             <div className="space-y-6">
               <div>
                 <p className="mb-4">
-                  <strong className="text-white">9.1</strong>{" "}
+                  <strong className="text-[#1C1614]">9.1</strong>{" "}
                   Das geltende Datenschutzrecht gewährt dir gegenüber uns als Verantwortlichen
                   hinsichtlich der Verarbeitung deiner personenbezogenen Daten die nachstehenden
                   Betroffenenrechte (Auskunfts- und Interventionsrechte), wobei für die jeweiligen
                   Ausübungsvoraussetzungen auf die angeführte Rechtsgrundlage verwiesen wird:
                 </p>
-                <ul className="list-disc list-inside space-y-2 pl-2 text-[#C9D0DC]">
+                <ul className="list-disc list-inside space-y-2 pl-2 text-[#1C1614]/65">
                   <li>Auskunftsrecht gemäß Art. 15 DSGVO</li>
                   <li>Recht auf Berichtigung gemäß Art. 16 DSGVO</li>
                   <li>Recht auf Löschung gemäß Art. 17 DSGVO</li>
@@ -1018,9 +1019,9 @@ export default function DatenschutzPage() {
                 </ul>
               </div>
 
-              <div className="bg-[#161A22] border border-[#2A2F3A] rounded-xl p-5">
-                <p className="font-semibold text-white mb-3 tracking-wide">9.2 WIDERSPRUCHSRECHT</p>
-                <div className="space-y-4 text-[#D1D5DB] text-[13px] uppercase leading-relaxed tracking-wide">
+              <div className="bg-[#F9F7F5] border border-[#1C1614]/10 rounded-xl p-5">
+                <p className="font-semibold text-[#1C1614] mb-3 tracking-wide">9.2 WIDERSPRUCHSRECHT</p>
+                <div className="space-y-4 text-[#1C1614]/75 text-[13px] uppercase leading-relaxed tracking-wide">
                   <p>
                     Wenn wir im Rahmen einer Interessenabwägung deine personenbezogenen Daten
                     aufgrund unseres überwiegenden berechtigten Interesses verarbeiten, hast du das
@@ -1051,11 +1052,11 @@ export default function DatenschutzPage() {
             </div>
           </section>
 
-          <hr className="border-[#2A2F3A]/60" />
+          <hr className="border-[#1C1614]/10" />
 
           {/* 10 */}
           <section id="s10">
-            <h2 className="text-lg font-semibold text-white mb-5">
+            <h2 className="text-lg font-semibold text-[#1C1614] mb-5">
               10) Dauer der Speicherung personenbezogener Daten
             </h2>
 
@@ -1102,22 +1103,22 @@ export default function DatenschutzPage() {
           </section>
 
           {/* Stand */}
-          <p className="text-[11px] text-[#4B5563] pt-4">Stand: 06.03.2026, 16:33:57</p>
+          <p className="text-[11px] text-[#1C1614]/35 pt-4">Stand: 06.03.2026, 16:33:57</p>
 
         </div>
       </main>
 
       {/* ── Footer ── */}
-      <footer className="border-t border-[#2A2F3A]/40 py-8">
+      <footer className="border-t border-[#1C1614]/10 py-8">
         <div className="max-w-6xl mx-auto px-6 md:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-[#6B7280] text-sm">
+          <p className="text-[#1C1614]/45 text-sm">
             © {new Date().getFullYear()} Flowmetry. Alle Rechte vorbehalten.
           </p>
           <div className="flex items-center gap-5">
-            <a href="/impressum" className="text-[#6B7280] hover:text-[#9CA3AF] text-sm transition-colors">Impressum</a>
-            <a href="/datenschutz" className="text-[#9CA3AF] text-sm">Datenschutz</a>
-            <a href="/agb" className="text-[#6B7280] hover:text-[#9CA3AF] text-sm transition-colors">AGB</a>
-            <a href="/widerrufsbelehrung" className="text-[#6B7280] hover:text-[#9CA3AF] text-sm transition-colors">Widerrufsbelehrung</a>
+            <a href="/impressum" className="text-[#1C1614]/45 hover:text-[#1C1614]/60 text-sm transition-colors">Impressum</a>
+            <a href="/datenschutz" className="text-[#8B4A1E] text-sm">Datenschutz</a>
+            <a href="/agb" className="text-[#1C1614]/45 hover:text-[#1C1614]/60 text-sm transition-colors">AGB</a>
+            <a href="/widerrufsbelehrung" className="text-[#1C1614]/45 hover:text-[#1C1614]/60 text-sm transition-colors">Widerrufsbelehrung</a>
           </div>
         </div>
       </footer>

@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
-import { Poppins } from "next/font/google";
+import { Playfair_Display } from "next/font/google";
 import "./globals.css";
 import { CookieConsent } from "./components/CookieConsent";
 
-const poppins = Poppins({
+const playfair = Playfair_Display({
   subsets: ["latin"],
-  weight: ["200", "300", "400"],
-  variable: "--font-poppins",
+  weight: ["400", "700"],
+  style: ["italic"],
+  variable: "--font-signature",
   display: "swap",
 });
 
@@ -22,8 +23,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="de" className="overflow-x-hidden">
-      <body className={`${poppins.variable} font-sans antialiased bg-black text-white overflow-x-hidden`}>
+    <html lang="de" className={`overflow-x-hidden ${playfair.variable}`}>
+      <body className="antialiased overflow-x-hidden">
         {children}
         <CookieConsent />
       </body>

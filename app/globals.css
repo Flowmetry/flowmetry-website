@@ -2,18 +2,19 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --background: #ffffff;
+}
+
 html {
   scroll-behavior: smooth;
 }
 
 body {
-  background-color: #000000;
-  color: #ffffff;
-  font-weight: 200;
-}
-
-h1, h2, h3, h4, h5, h6 {
-  font-weight: 200;
+  background-color: #ffffff;
+  color: #1C1614;
+  font-weight: 400;
+  font-family: Arial, sans-serif;
 }
 
 /* Remove default details marker */
@@ -85,12 +86,12 @@ details summary::-webkit-details-marker {
   width: 5px;
 }
 ::-webkit-scrollbar-track {
-  background: #0F1115;
+  background: #F0EDE8;
 }
 ::-webkit-scrollbar-thumb {
-  background: #2A2F3A;
+  background: #D4B8A3;
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #3B82F6;
+  background: #cd9b7b;
 }
